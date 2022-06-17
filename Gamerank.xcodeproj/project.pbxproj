@@ -82,6 +82,7 @@
 		BC19768028589AD8000ABE4C /* Gamerank */ = {
 			isa = PBXGroup;
 			children = (
+				BC6339B2285D1C7300203980 /* TableViewCell */,
 				BC1976A02858AE48000ABE4C /* Utility */,
 				BC19769D28589E00000ABE4C /* Base */,
 				BC19769C28589D71000ABE4C /* ViewController */,
@@ -118,7 +119,6 @@
 			isa = PBXGroup;
 			children = (
 				BC19768528589AD8000ABE4C /* ListGamesViewController.swift */,
-				BC1976C5285B91B6000ABE4C /* GameTableViewCell.swift */,
 				BC1976C9285B9B3C000ABE4C /* DetailGameViewController.swift */,
 				BC1976D5285CA1CD000ABE4C /* ProfileViewController.swift */,
 			);
@@ -144,6 +144,14 @@
 				BC1976D3285C9B6E000ABE4C /* Formatter.swift */,
 			);
 			path = Utility;
+			sourceTree = "<group>";
+		};
+		BC6339B2285D1C7300203980 /* TableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				BC1976C5285B91B6000ABE4C /* GameTableViewCell.swift */,
+			);
+			path = TableViewCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
