@@ -46,17 +46,11 @@ class ListGamesViewController: UIViewController {
             break
             }
             
-            
-            
-            
-            
         })
         self.gamesTableView.dataSource = self
         
-        // Menambahkan delegate ke table view
         self.gamesTableView.delegate = self
         
-        // Menghubungkan berkas XIB untuk HeroTableViewCell dengn heroTableView.
         gamesTableView.register(UINib(nibName: "GameTableViewCell", bundle: nil), forCellReuseIdentifier: "GameCell")
     }
     @IBAction func showProfile(_ sender: Any) {
@@ -77,7 +71,6 @@ extension ListGamesViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        // Menetapkan nilai hero ke view di dalam cell
         let game = games?[indexPath.row]
         cell.layoutMargins = UIEdgeInsets.zero
         cell.gameNameLabel.text = game?.nameGame
@@ -106,10 +99,8 @@ extension ListGamesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detail = DetailGameViewController(nibName: "DetailGameViewController", bundle: nil)
         
-        // Mengirim data hero
         detail.game = games![indexPath.row]
         
-        // Push/mendorong view controller lain
         self.navigationController?.pushViewController(detail, animated: true)
     }
 }
