@@ -28,14 +28,11 @@ class ImageDownloader: Operation {
         }
  
         if !imageData.isEmpty {
-            
             _game.imageGame = UIImage(data: imageData)
             _game.state = .downloaded
-            print("Berhasil \(_game.state)")
         } else {
             _game.imageGame = nil
             _game.state = .failed
-            print("Gagal \(_game.state)")
         }
     }
  

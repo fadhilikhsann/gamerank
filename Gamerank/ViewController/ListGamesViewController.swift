@@ -58,7 +58,6 @@ class ListGamesViewController: UIViewController {
         
         // Menghubungkan berkas XIB untuk HeroTableViewCell dengn heroTableView.
         gamesTableView.register(UINib(nibName: "GameTableViewCell", bundle: nil), forCellReuseIdentifier: "GameCell")
-        print("mboo")
     }
     @IBAction func showProfile(_ sender: Any) {
         let profile = ProfileViewController(nibName: "ProfileViewController", bundle: nil)
@@ -84,8 +83,6 @@ extension ListGamesViewController: UITableViewDataSource {
         cell.gameNameLabel.text = game?.nameGame
         let formatter = DateFormatter()
         formatter.dateFormat = "dd MMM yyyy"
-        
-        print("trying to create row at \(indexPath) & \(String(describing: game!.state))")
         
         cell.gameReleasedLabel.text = "Released in \(dateFormat.getDate(releasedGame: (game?.releasedGame)!))"
         cell.gameRatingLabel.text = "\(String(describing: Double(round(10 * game!.ratingGame) / 10)))/5"
@@ -129,7 +126,6 @@ extension ListGamesViewController: UIScrollViewDelegate {
 
 extension ListGamesViewController{
     fileprivate func startOperations(game: GameModel, indexPath: IndexPath) {
-        print("trying to download \(indexPath) && \(game.state)")
         if game.state == .new {
             startDownload(game: game, indexPath: indexPath)
         }
