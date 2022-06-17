@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProfileViewController" customModule="Gamerank" customModuleProvider="target">
+            <connections>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fadhil Ikhsanta" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MHP-1b-qVI">
+                    <rect key="frame" x="20" y="478" width="142.5" height="24"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="fadhilikhsanta@gmail.com" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WNt-aR-8Qp">
+                    <rect key="frame" x="20" y="512" width="169" height="17"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Fadhil Ikhsanta" translatesAutoresizingMaskIntoConstraints="NO" id="qrE-lt-wEG">
+                    <rect key="frame" x="0.0" y="44" width="414" height="414"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="414" id="Aqz-hx-e55"/>
+                        <constraint firstAttribute="width" constant="414" id="B4e-lk-TIK"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="414" id="FH2-bJ-AZX"/>
+                        <constraint firstAttribute="height" constant="414" id="IKi-fK-iRG"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="WNt-aR-8Qp" firstAttribute="top" secondItem="MHP-1b-qVI" secondAttribute="bottom" constant="10" id="191-zL-8Ie"/>
+                <constraint firstItem="qrE-lt-wEG" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="B1g-Hi-f3Z"/>
+                <constraint firstItem="WNt-aR-8Qp" firstAttribute="top" secondItem="MHP-1b-qVI" secondAttribute="bottom" constant="10" id="Il9-JZ-2bP"/>
+                <constraint firstItem="qrE-lt-wEG" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="TQF-yY-uBT"/>
+                <constraint firstItem="qrE-lt-wEG" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="WAx-yp-8xV"/>
+                <constraint firstItem="MHP-1b-qVI" firstAttribute="top" secondItem="qrE-lt-wEG" secondAttribute="bottom" constant="20" id="hk1-W6-gPu"/>
+                <constraint firstItem="WNt-aR-8Qp" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="itg-aO-1sI"/>
+                <constraint firstItem="MHP-1b-qVI" firstAttribute="top" secondItem="qrE-lt-wEG" secondAttribute="bottom" constant="20" id="mKT-qY-ziB"/>
+                <constraint firstItem="MHP-1b-qVI" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="rIC-xc-n2Z"/>
+            </constraints>
+            <point key="canvasLocation" x="132" y="69"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="Fadhil Ikhsanta" width="677" height="508"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
