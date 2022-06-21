@@ -11,13 +11,13 @@ struct RootModel:Codable{
     var count: Int = 0
     var next: String? = nil
     var previous: String? = nil
-    var listGames: [GameModel]? = nil
+    var listGame: [GameModel]? = nil
     
     enum CodingKeys: String, CodingKey{
         case count = "count"
         case next = "next"
         case previous = "previous"
-        case listGames = "results"
+        case listGame = "results"
     }
     
     init(from decoder: Decoder) throws {
@@ -27,6 +27,6 @@ struct RootModel:Codable{
         count = try container.decodeIfPresent(Int.self, forKey: .count) ?? 0
         next = try container.decodeIfPresent(String.self, forKey: .next)
         previous = try container.decodeIfPresent(String.self, forKey: .previous)
-        listGames = try container.decode([GameModel].self, forKey: .listGames)
+        listGame = try container.decode([GameModel].self, forKey: .listGame)
     }
 }

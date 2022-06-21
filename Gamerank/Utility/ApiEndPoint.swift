@@ -25,7 +25,7 @@ extension ApiEndPoint {
         )
     }
     
-    func getListGames() -> ApiEndPoint {
+    func getListGame() -> ApiEndPoint {
         return ApiEndPoint(
             path: "/api/games",
             queryItems: [

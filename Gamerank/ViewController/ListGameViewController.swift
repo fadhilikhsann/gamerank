@@ -7,13 +7,15 @@
 
 import UIKit
 
-class ListGamesViewController: UIViewController {
+class ListGameViewController: UIViewController {
     let apiRequest = ApiRequest()
     let apiEndPoint = ApiEndPoint()
     let dateFormat = DateFormat()
     var games:[GameModel]? = nil
     private let _pendingOperations = PendingOperations()
-    @IBOutlet weak var gamesTableView: UITableView!
+    @IBOutlet weak var gameTableView: UITableView!
+    
+    
     
     override func viewWillAppear(_ animated: Bool) {
         toggleSuspendOperations(isSuspended: false)
@@ -22,7 +24,7 @@ class ListGamesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        apiRequest.request(endPoint: apiEndPoint.getListGames(),{
+        apiRequest.request(endPoint: apiEndPoint.getListGame(),{
             result in
             
             switch result {
@@ -34,10 +36,10 @@ class ListGamesViewController: UIViewController {
                 
                 if let gamesData = try? decoder.decode(RootModel.self, from: data.0) as RootModel {
                     
-                    self.games = gamesData.listGames!
+                    self.games = gamesData.listGame!
                     
                     DispatchQueue.main.async {
-                        self.gamesTableView.reloadData()
+                        self.gameTableView.reloadData()
                     }
                     
                 } else {
@@ -47,12 +49,13 @@ class ListGamesViewController: UIViewController {
             }
             
         })
-        self.gamesTableView.dataSource = self
+        self.gameTableView.dataSource = self
         
-        self.gamesTableView.delegate = self
+        self.gameTableView.delegate = self
         
-        gamesTableView.register(UINib(nibName: "GameTableViewCell", bundle: nil), forCellReuseIdentifier: "GameCell")
+        gameTableView.register(UINib(nibName: "GameTableViewCell", bundle: nil), forCellReuseIdentifier: "GameCell")
     }
+    
     @IBAction func showProfile(_ sender: Any) {
         let profile = ProfileViewController(nibName: "ProfileViewController", bundle: nil)
         self.navigationController?.pushViewController(profile, animated: true)
@@ -60,7 +63,7 @@ class ListGamesViewController: UIViewController {
     
 }
 
-extension ListGamesViewController: UITableViewDataSource {
+extension ListGameViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return games?.count ?? 0
     }
@@ -95,7 +98,7 @@ extension ListGamesViewController: UITableViewDataSource {
     
 }
 
-extension ListGamesViewController: UITableViewDelegate {
+extension ListGameViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detail = DetailGameViewController(nibName: "DetailGameViewController", bundle: nil)
         
@@ -105,7 +108,7 @@ extension ListGamesViewController: UITableViewDelegate {
     }
 }
 
-extension ListGamesViewController: UIScrollViewDelegate {
+extension ListGameViewController: UIScrollViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         toggleSuspendOperations(isSuspended: true)
     }
@@ -115,7 +118,7 @@ extension ListGamesViewController: UIScrollViewDelegate {
     }
 }
 
-extension ListGamesViewController{
+extension ListGameViewController{
     fileprivate func startOperations(game: GameModel, indexPath: IndexPath) {
         if game.state == .new {
             startDownload(game: game, indexPath: indexPath)
@@ -130,7 +133,7 @@ extension ListGamesViewController{
  
             DispatchQueue.main.async {
                 self._pendingOperations.downloadInProgress.removeValue(forKey: indexPath)
-                self.gamesTableView.reloadRows(at: [indexPath], with: .automatic)
+                self.gameTableView.reloadRows(at: [indexPath], with: .automatic)
             }
         }
  

@@ -11,12 +11,12 @@
         <!--Game List-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ListGamesViewController" customModule="Gamerank" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ListGameViewController" customModule="Gamerank" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Sa4-sm-DsL">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="6TY-KV-Be5">
                                 <rect key="frame" x="0.0" y="88" width="414" height="808"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
@@ -24,10 +24,10 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="Sa4-sm-DsL" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="3Zq-if-blz"/>
-                            <constraint firstItem="Sa4-sm-DsL" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Ha5-AP-hbD"/>
-                            <constraint firstAttribute="bottom" secondItem="Sa4-sm-DsL" secondAttribute="bottom" id="ZBe-Vk-nsY"/>
-                            <constraint firstItem="Sa4-sm-DsL" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="oRl-xI-TLs"/>
+                            <constraint firstItem="6TY-KV-Be5" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="1QS-xi-CVV"/>
+                            <constraint firstAttribute="bottom" secondItem="6TY-KV-Be5" secondAttribute="bottom" id="Sci-o5-LXU"/>
+                            <constraint firstItem="6TY-KV-Be5" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="dNN-Lz-xXB"/>
+                            <constraint firstItem="6TY-KV-Be5" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="tqo-33-J4v"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Game List" id="s5r-rI-nwg">
@@ -38,12 +38,12 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="gamesTableView" destination="Sa4-sm-DsL" id="fNj-fW-1mh"/>
+                        <outlet property="gameTableView" destination="6TY-KV-Be5" id="e1e-Pi-qLa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="535" y="84"/>
+            <point key="canvasLocation" x="534.78260869565224" y="83.705357142857139"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="xdm-M4-cFm">
