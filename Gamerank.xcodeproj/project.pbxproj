@@ -28,6 +28,8 @@
 		BC1976D8285CA1CD000ABE4C /* ProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC1976D6285CA1CD000ABE4C /* ProfileViewController.xib */; };
 		BCAB75E62861B292003FE514 /* FavoriteGameProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAB75E52861B292003FE514 /* FavoriteGameProvider.swift */; };
 		BCAB75E92861B2E6003FE514 /* FavoriteGame.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BCAB75E72861B2E6003FE514 /* FavoriteGame.xcdatamodeld */; };
+		BCAB75EC2861FF60003FE514 /* ListFavoriteGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAB75EA2861FF60003FE514 /* ListFavoriteGameViewController.swift */; };
+		BCAB75ED2861FF60003FE514 /* ListFavoriteGameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCAB75EB2861FF60003FE514 /* ListFavoriteGameViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +56,8 @@
 		BC1976D6285CA1CD000ABE4C /* ProfileViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProfileViewController.xib; sourceTree = "<group>"; };
 		BCAB75E52861B292003FE514 /* FavoriteGameProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteGameProvider.swift; sourceTree = "<group>"; };
 		BCAB75E82861B2E6003FE514 /* FavoriteGame.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FavoriteGame.xcdatamodel; sourceTree = "<group>"; };
+		BCAB75EA2861FF60003FE514 /* ListFavoriteGameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListFavoriteGameViewController.swift; sourceTree = "<group>"; };
+		BCAB75EB2861FF60003FE514 /* ListFavoriteGameViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ListFavoriteGameViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,29 +90,30 @@
 		BC19768028589AD8000ABE4C /* Gamerank */ = {
 			isa = PBXGroup;
 			children = (
-				BCAB75E42861B27A003FE514 /* CoreDataProvider */,
+				BCAB75E42861B27A003FE514 /* Provider */,
 				BC6339B2285D1C7300203980 /* TableViewCell */,
 				BC1976A02858AE48000ABE4C /* Utility */,
 				BC19769D28589E00000ABE4C /* Base */,
-				BC19769C28589D71000ABE4C /* ViewController */,
+				BC19769C28589D71000ABE4C /* Controller */,
 				BC19769928589D4C000ABE4C /* Model */,
-				BC19769528589B21000ABE4C /* Screen */,
+				BC19769528589B21000ABE4C /* View */,
 				BC19768A28589ADA000ABE4C /* Assets.xcassets */,
 				BC19768F28589ADA000ABE4C /* Info.plist */,
 			);
 			path = Gamerank;
 			sourceTree = "<group>";
 		};
-		BC19769528589B21000ABE4C /* Screen */ = {
+		BC19769528589B21000ABE4C /* View */ = {
 			isa = PBXGroup;
 			children = (
+				BCAB75EB2861FF60003FE514 /* ListFavoriteGameViewController.xib */,
 				BC1976D6285CA1CD000ABE4C /* ProfileViewController.xib */,
 				BC1976CA285B9B3C000ABE4C /* DetailGameViewController.xib */,
 				BC1976C6285B91B6000ABE4C /* GameTableViewCell.xib */,
 				BC19768728589AD8000ABE4C /* Main.storyboard */,
 				BC19768C28589ADA000ABE4C /* LaunchScreen.storyboard */,
 			);
-			path = Screen;
+			path = View;
 			sourceTree = "<group>";
 		};
 		BC19769928589D4C000ABE4C /* Model */ = {
@@ -120,14 +125,15 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		BC19769C28589D71000ABE4C /* ViewController */ = {
+		BC19769C28589D71000ABE4C /* Controller */ = {
 			isa = PBXGroup;
 			children = (
 				BC19768528589AD8000ABE4C /* ListGameViewController.swift */,
 				BC1976C9285B9B3C000ABE4C /* DetailGameViewController.swift */,
 				BC1976D5285CA1CD000ABE4C /* ProfileViewController.swift */,
+				BCAB75EA2861FF60003FE514 /* ListFavoriteGameViewController.swift */,
 			);
-			path = ViewController;
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		BC19769D28589E00000ABE4C /* Base */ = {
@@ -159,13 +165,13 @@
 			path = TableViewCell;
 			sourceTree = "<group>";
 		};
-		BCAB75E42861B27A003FE514 /* CoreDataProvider */ = {
+		BCAB75E42861B27A003FE514 /* Provider */ = {
 			isa = PBXGroup;
 			children = (
 				BCAB75E52861B292003FE514 /* FavoriteGameProvider.swift */,
 				BCAB75E72861B2E6003FE514 /* FavoriteGame.xcdatamodeld */,
 			);
-			path = CoreDataProvider;
+			path = Provider;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -227,6 +233,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BC1976D8285CA1CD000ABE4C /* ProfileViewController.xib in Resources */,
+				BCAB75ED2861FF60003FE514 /* ListFavoriteGameViewController.xib in Resources */,
 				BC19768E28589ADA000ABE4C /* LaunchScreen.storyboard in Resources */,
 				BC1976CC285B9B3C000ABE4C /* DetailGameViewController.xib in Resources */,
 				BC19768B28589ADA000ABE4C /* Assets.xcassets in Resources */,
@@ -246,6 +253,7 @@
 				BC19769B28589D67000ABE4C /* RootModel.swift in Sources */,
 				BC1976D2285C8320000ABE4C /* PendingOperations.swift in Sources */,
 				BC19768628589AD8000ABE4C /* ListGameViewController.swift in Sources */,
+				BCAB75EC2861FF60003FE514 /* ListFavoriteGameViewController.swift in Sources */,
 				BC19768228589AD8000ABE4C /* AppDelegate.swift in Sources */,
 				BC19768428589AD8000ABE4C /* SceneDelegate.swift in Sources */,
 				BCAB75E62861B292003FE514 /* FavoriteGameProvider.swift in Sources */,

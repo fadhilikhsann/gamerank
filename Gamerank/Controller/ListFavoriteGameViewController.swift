@@ -1,71 +1,68 @@
 //
-//  ViewController.swift
+//  ListFavoriteGameViewController.swift
 //  Gamerank
 //
-//  Created by Fadhil Ikhsanta on 14/06/22.
+//  Created by Fadhil Ikhsanta on 21/06/22.
 //
 
 import UIKit
 
-class ListGameViewController: UIViewController {
-    let apiRequest = ApiRequest()
-    let apiEndPoint = ApiEndPoint()
+class ListFavoriteGameViewController: UIViewController {
+    
+    var tempIndexPath: IndexPath = []
+    var tempIdGame: Int = 0
+    private var favoriteGames: [GameModel]? = nil
     let dateFormat = DateFormat()
-    var games:[GameModel]? = nil
     private let _pendingOperations = PendingOperations()
-    @IBOutlet weak var gameTableView: UITableView!
-    
-    
+    @IBOutlet weak var favoriteGameTableView: UITableView!
+    private lazy var favoriteGameProvider: FavoriteGameProvider = { return FavoriteGameProvider() }()
     
     override func viewWillAppear(_ animated: Bool) {
-        toggleSuspendOperations(isSuspended: false)
+        if tempIdGame != 0 {
+            favoriteGameProvider.checkFavoriteGame(
+                tempIdGame
+            ){
+                isFavoriteGame in
+                if !isFavoriteGame {
+                    DispatchQueue.main.async {
+                        self.favoriteGames!.remove(at: self.tempIndexPath.row)
+                        self.favoriteGameTableView.beginUpdates()
+                        self.favoriteGameTableView.deleteRows(at: [self.tempIndexPath], with: .automatic)
+                        self.favoriteGameTableView.endUpdates()
+                    }
+                    
+                }
+            }
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "Favorite"
+        loadFavoriteGame()
+        self.favoriteGameTableView.dataSource = self
         
-        apiRequest.request(endPoint: apiEndPoint.getListGame(),{
-            result in
-            
-            switch result {
-            case .failure(let error):
-                print(error)
-            break
-            case .success(let data):
-                let decoder = JSONDecoder()
-                
-                if let gamesData = try? decoder.decode(RootModel.self, from: data.0) as RootModel {
-                    
-                    self.games = gamesData.listGame!
-                    
-                    DispatchQueue.main.async {
-                        self.gameTableView.reloadData()
-                    }
-                    
-                } else {
-                    print("ERROR: Can't Decode JSON")
-                }
-            break
-            }
-            
-        })
-        self.gameTableView.dataSource = self
+        self.favoriteGameTableView.delegate = self
         
-        self.gameTableView.delegate = self
-        
-        gameTableView.register(UINib(nibName: "GameTableViewCell", bundle: nil), forCellReuseIdentifier: "GameCell")
+        favoriteGameTableView.register(UINib(nibName: "GameTableViewCell", bundle: nil), forCellReuseIdentifier: "GameCell")
     }
     
-    @IBAction func showProfile(_ sender: Any) {
-        let profile = ProfileViewController(nibName: "ProfileViewController", bundle: nil)
-        self.navigationController?.pushViewController(profile, animated: true)
+    func loadFavoriteGame(){
+        self.favoriteGameProvider.getAllFavoriteGame{
+            result in
+            DispatchQueue.main.async {
+                self.favoriteGames = result
+                self.favoriteGameTableView.reloadData()
+            }
+        }
     }
     
 }
 
-extension ListGameViewController: UITableViewDataSource {
+extension ListFavoriteGameViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return games?.count ?? 0
+        return favoriteGames?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -74,20 +71,20 @@ extension ListGameViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let game = games?[indexPath.row]
+        let game = favoriteGames?[indexPath.row]
         cell.layoutMargins = UIEdgeInsets.zero
         cell.gameNameLabel.text = game?.nameGame
         let formatter = DateFormatter()
         formatter.dateFormat = "dd MMM yyyy"
-        
-        cell.gameReleasedLabel.text = "Released in \(dateFormat.getDate(releasedGame: (game?.releasedGame)!))"
+
+//        cell.gameReleasedLabel.text = "Released in \(dateFormat.getDate(releasedGame: game?.releasedGame))"
         cell.gameRatingLabel.text = "\(String(describing: Double(round(10 * game!.ratingGame) / 10)))/5"
-        
+
         cell.gameImageView.image = game?.imageGame
-        
+
         cell.gameImageView.layer.cornerRadius = 10
         cell.gameImageView.clipsToBounds = true
-        
+
         if game!.state == .new {
             startOperations(game: game!, indexPath: indexPath)
         }
@@ -98,17 +95,19 @@ extension ListGameViewController: UITableViewDataSource {
     
 }
 
-extension ListGameViewController: UITableViewDelegate {
+extension ListFavoriteGameViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detail = DetailGameViewController(nibName: "DetailGameViewController", bundle: nil)
         
-        detail.game = games![indexPath.row]
+        detail.game = favoriteGames![indexPath.row]
+        tempIndexPath = indexPath
+        tempIdGame = favoriteGames![indexPath.row].idGame
         
         self.navigationController?.pushViewController(detail, animated: true)
     }
 }
 
-extension ListGameViewController: UIScrollViewDelegate {
+extension ListFavoriteGameViewController: UIScrollViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         toggleSuspendOperations(isSuspended: true)
     }
@@ -118,7 +117,7 @@ extension ListGameViewController: UIScrollViewDelegate {
     }
 }
 
-extension ListGameViewController{
+extension ListFavoriteGameViewController{
     fileprivate func startOperations(game: GameModel, indexPath: IndexPath) {
         if game.state == .new {
             startDownload(game: game, indexPath: indexPath)
@@ -133,7 +132,7 @@ extension ListGameViewController{
  
             DispatchQueue.main.async {
                 self._pendingOperations.downloadInProgress.removeValue(forKey: indexPath)
-                self.gameTableView.reloadRows(at: [indexPath], with: .automatic)
+                self.favoriteGameTableView.reloadRows(at: [indexPath], with: .automatic)
             }
         }
  
