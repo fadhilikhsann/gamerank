@@ -77,7 +77,7 @@ extension ListFavoriteGameViewController: UITableViewDataSource {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd MMM yyyy"
 
-//        cell.gameReleasedLabel.text = "Released in \(dateFormat.getDate(releasedGame: game?.releasedGame))"
+        cell.gameReleasedLabel.text = "Released in \(dateFormat.getDate(releasedGame: (game?.releasedGame)!))"
         cell.gameRatingLabel.text = "\(String(describing: Double(round(10 * game!.ratingGame) / 10)))/5"
 
         cell.gameImageView.image = game?.imageGame
