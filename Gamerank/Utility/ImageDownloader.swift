@@ -10,12 +10,18 @@ import UIKit
 
 class ImageDownloader: Operation {
  
-    private var _game: GameModel
+//    private var _game: GameModel
+//
+//    init(game: GameModel) {
+//        _game = game
+//    }
  
-    init(game: GameModel) {
+    private var _game: GameEntity
+ 
+    init(game: GameEntity) {
         _game = game
     }
- 
+    
     override func main() {
         if isCancelled {
             return
@@ -35,5 +41,5 @@ class ImageDownloader: Operation {
             _game.state = .failed
         }
     }
- 
+
 }

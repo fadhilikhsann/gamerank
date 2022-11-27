@@ -8,10 +8,9 @@
 import UIKit
 
 class ListGameViewController: UIViewController {
-    let apiRequest = ApiRequest()
-    let apiEndPoint = ApiEndPoint()
     let dateFormat = DateFormat()
-    var games:[GameModel]? = nil
+//    var games:[GameModel]? = nil
+    var games:[GameEntity]? = nil
     private let _pendingOperations = PendingOperations()
     @IBOutlet weak var gameTableView: UITableView!
     
@@ -23,32 +22,39 @@ class ListGameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.prefersLargeTitles = true
         
-        apiRequest.request(endPoint: apiEndPoint.getListGame(),{
-            result in
-            
-            switch result {
-            case .failure(let error):
-                print(error)
-            break
-            case .success(let data):
-                let decoder = JSONDecoder()
-                
-                if let gamesData = try? decoder.decode(RootModel.self, from: data.0) as RootModel {
-                    
-                    self.games = gamesData.listGame!
-                    
-                    DispatchQueue.main.async {
-                        self.gameTableView.reloadData()
-                    }
-                    
-                } else {
-                    print("ERROR: Can't Decode JSON")
-                }
-            break
-            }
-            
-        })
+        
+        self.games = GamePresenter(gameUseCaseProtocol: GameInjection.init().provideGameUseCase())
+            .getListGame()
+//        self.gameTableView.reloadData()
+        
+//        apiRequest.request(endPoint: apiEndPoint.getListGame(),{
+//            result in
+//
+//            switch result {
+//            case .failure(let error):
+//                print(error)
+//                break
+//            case .success(let data):
+//                let decoder = JSONDecoder()
+//
+//                if let gamesData = try? decoder.decode(RootModel.self, from: data.0) as RootModel {
+//
+//                    self.games = gamesData.listGame!
+//
+//                    DispatchQueue.main.async {
+//                        self.gameTableView.reloadData()
+//                    }
+//
+//                } else {
+//                    print("ERROR: Can't Decode JSON")
+//                }
+//                break
+//            }
+//
+//        })
+        
         self.gameTableView.dataSource = self
         
         self.gameTableView.delegate = self
@@ -67,6 +73,13 @@ class ListGameViewController: UIViewController {
     
 }
 
+extension ListGameViewController: UINavigationBarDelegate{
+    func navigationBar(_ navigationBar: UINavigationBar, shouldPush item: UINavigationItem) -> Bool {
+        item.setValue(true, forKey: "__largeTitleTwoLineMode")
+        return true
+    }
+}
+
 extension ListGameViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return games?.count ?? 0
@@ -83,15 +96,15 @@ extension ListGameViewController: UITableViewDataSource {
         cell.gameNameLabel.text = game?.nameGame
         let formatter = DateFormatter()
         formatter.dateFormat = "dd MMM yyyy"
-
+        
         cell.gameReleasedLabel.text = "Released in \(dateFormat.getDate(releasedGame: (game?.releasedGame)!))"
         cell.gameRatingLabel.text = "\(String(describing: Double(round(10 * game!.ratingGame) / 10)))/5"
-
+        
         cell.gameImageView.image = game?.imageGame
-
+        
         cell.gameImageView.layer.cornerRadius = 10
         cell.gameImageView.clipsToBounds = true
-
+        
         if game!.state == .new {
             startOperations(game: game!, indexPath: indexPath)
         }
@@ -107,8 +120,10 @@ extension ListGameViewController: UITableViewDelegate {
         let detail = DetailGameViewController(nibName: "DetailGameViewController", bundle: nil)
         
         detail.game = games![indexPath.row]
+        detail.modalPresentationStyle = .popover
         
         self.navigationController?.pushViewController(detail, animated: true)
+//        self.present(detail, animated: true)
     }
 }
 
@@ -116,35 +131,57 @@ extension ListGameViewController: UIScrollViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         toggleSuspendOperations(isSuspended: true)
     }
-
+    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         toggleSuspendOperations(isSuspended: false)
     }
 }
 
 extension ListGameViewController{
-    fileprivate func startOperations(game: GameModel, indexPath: IndexPath) {
+//    fileprivate func startOperations(game: GameModel, indexPath: IndexPath) {
+//        if game.state == .new {
+//            startDownload(game: game, indexPath: indexPath)
+//        }
+//    }
+//
+//    fileprivate func startDownload(game: GameModel, indexPath: IndexPath) {
+//        guard _pendingOperations.downloadInProgress[indexPath] == nil else { return }
+//        let downloader = ImageDownloader(game: game)
+//        downloader.completionBlock = {
+//            if downloader.isCancelled { return }
+//
+//            DispatchQueue.main.async {
+//                self._pendingOperations.downloadInProgress.removeValue(forKey: indexPath)
+//                self.gameTableView.reloadRows(at: [indexPath], with: .automatic)
+//            }
+//        }
+//
+//        _pendingOperations.downloadInProgress[indexPath] = downloader
+//        _pendingOperations.downloadQueue.addOperation(downloader)
+//    }
+    
+    fileprivate func startOperations(game: GameEntity, indexPath: IndexPath) {
         if game.state == .new {
             startDownload(game: game, indexPath: indexPath)
         }
     }
- 
-    fileprivate func startDownload(game: GameModel, indexPath: IndexPath) {
+    
+    fileprivate func startDownload(game: GameEntity, indexPath: IndexPath) {
         guard _pendingOperations.downloadInProgress[indexPath] == nil else { return }
         let downloader = ImageDownloader(game: game)
         downloader.completionBlock = {
             if downloader.isCancelled { return }
- 
+            
             DispatchQueue.main.async {
                 self._pendingOperations.downloadInProgress.removeValue(forKey: indexPath)
                 self.gameTableView.reloadRows(at: [indexPath], with: .automatic)
             }
         }
- 
+        
         _pendingOperations.downloadInProgress[indexPath] = downloader
         _pendingOperations.downloadQueue.addOperation(downloader)
     }
- 
+    
     fileprivate func toggleSuspendOperations(isSuspended: Bool) {
         _pendingOperations.downloadQueue.isSuspended = isSuspended
     }

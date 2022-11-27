@@ -9,10 +9,9 @@ import UIKit
 
 class DetailGameViewController: UIViewController {
     
-    var game: GameModel? = nil
+    //    var game: GameModel? = nil
+    var game: GameEntity? = nil
     var isFavorite: Bool = false
-    let apiRequest = ApiRequest()
-    let apiEndPoint = ApiEndPoint()
     let dateFormat = DateFormat()
     
     @IBOutlet weak var gameImageView: UIImageView!
@@ -22,7 +21,7 @@ class DetailGameViewController: UIViewController {
     @IBOutlet weak var gameRatingLabel: UILabel!
     @IBOutlet weak var favoriteGame: UIImageView!
     
-    private lazy var favoriteGameProvider: FavoriteGameProvider = { return FavoriteGameProvider() }()
+//    private lazy var favoriteGameProvider: FavoriteGameProvider = { return FavoriteGameProvider() }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,54 +36,42 @@ class DetailGameViewController: UIViewController {
         
         self.favoriteGame.image = favoriteGame.image?.withRenderingMode(.alwaysTemplate)
         
-        favoriteGameProvider.checkFavoriteGame(
-            game!.idGame
-        ){
-            isFavoriteGame in
-            if isFavoriteGame {
-                self.isFavorite = true
+        if(GamePresenter(
+            gameUseCaseProtocol: GameInjection.init()
+            .provideGameUseCase())
+            .checkFavoriteGame(game!.idGame)
+        ) {
+            self.isFavorite = true
+            self.favoriteGame.tintColor = UIColor.systemPink
+        }
+        
+        
+        //        favoriteGameProvider.checkFavoriteGame(
+        //            game!.idGame
+        //        ){
+        //            isFavoriteGame in
+        //            if isFavoriteGame {
+        //                self.isFavorite = true
+        //                DispatchQueue.main.async {
+        //                    self.favoriteGame.tintColor = UIColor.systemPink
+        //                }
+        //
+        //            }
+        //        }
+        
+        self.gameDetailLabel.text = GamePresenter(gameUseCaseProtocol: GameInjection.init().provideGameUseCase())
+            .getDetailGame(idGame: game!.idGame).descriptionGame?.htmlToString ?? ""
+        
+        if self.game!.imageGame == nil {
+            if let imageData = try? Data(contentsOf: self.game!.urlImageGame!){
                 DispatchQueue.main.async {
-                    self.favoriteGame.tintColor = UIColor.systemPink
+                    self.gameImageView.image = UIImage(data: imageData)
                 }
-                
             }
         }
         
-        apiRequest.request(endPoint: apiEndPoint.getDetailGame(id: game!.idGame),{
-            result in
-            
-            switch result {
-            case .failure(let error):
-                print(error)
-                break
-            case .success(let data):
-                let decoder = JSONDecoder()
-                
-                if let gameData = try? decoder.decode(GameModel.self, from: data.0) as GameModel {
-                    
-                    DispatchQueue.main.async {
-                        self.gameDetailLabel.text = gameData.descriptionGame?.htmlToString ?? ""
-                    }
-                    
-                    if self.game!.imageGame == nil {
-                        if let imageData = try? Data(contentsOf: self.game!.urlImageGame!){
-                            DispatchQueue.main.async {
-                                self.gameImageView.image = UIImage(data: imageData)
-                            }
-                        }
-                    }
-                    
-                } else {
-                    print("ERROR: Can't Decode JSON")
-                }
-                break
-            }
-            
-            
-        })
-        
-        let tapGR = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped))
-        favoriteGame.addGestureRecognizer(tapGR)
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped))
+        favoriteGame.addGestureRecognizer(tapGestureRecognizer)
         favoriteGame.isUserInteractionEnabled = true
         // Do any additional setup after loading the view.
     }
@@ -104,6 +91,7 @@ class DetailGameViewController: UIViewController {
 
 extension DetailGameViewController{
     @objc func imageTapped(sender: UITapGestureRecognizer) {
+        print("CLICKED")
         if sender.state == .ended {
             if isFavorite{
                 removeFavoriteGame()
@@ -114,36 +102,76 @@ extension DetailGameViewController{
     }
     
     func addFavoriteGame(){
-        favoriteGameProvider.addFavoriteGame(
-            game!.idGame,
-            game!.nameGame!,
-            game!.releasedGame!,
-            game!.urlImageGame!,
-            game!.ratingGame
-        ) {
-            DispatchQueue.main.async {
-                let alert = UIAlertController(title: "Successful", message: "\(self.game!.nameGame!) has added to favorite game.", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
-                    self.isFavorite = true
-                    self.favoriteGame.tintColor = UIColor.systemPink
-                })
-                self.present(alert, animated: true, completion: nil)
-            }
+        print("DI SINI")
+        if (GamePresenter(
+            gameUseCaseProtocol: GameInjection.init()
+            .provideGameUseCase())
+            .addFavoriteGame(
+                game!.idGame,
+                game!.nameGame!,
+                game!.releasedGame!,
+                game!.urlImageGame!,
+                game!.ratingGame
+            )
+        ){
+            print("TRY")
+            let alert = UIAlertController(title: "Successful", message: "\(self.game!.nameGame!) has added to favorite game.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+                self.isFavorite = true
+                self.favoriteGame.tintColor = UIColor.systemPink
+            })
+            self.present(alert, animated: true, completion: nil)
+        } else {
+            print("gagal")
         }
+        
+//        favoriteGameProvider.addFavoriteGame(
+//            game!.idGame,
+//            game!.nameGame!,
+//            game!.releasedGame!,
+//            game!.urlImageGame!,
+//            game!.ratingGame
+//        ) {
+//            DispatchQueue.main.async {
+//                let alert = UIAlertController(title: "Successful", message: "\(self.game!.nameGame!) has added to favorite game.", preferredStyle: .alert)
+//                alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+//                    self.isFavorite = true
+//                    self.favoriteGame.tintColor = UIColor.systemPink
+//                })
+//                self.present(alert, animated: true, completion: nil)
+//            }
+//        }
+        
     }
     
     func removeFavoriteGame(){
-        favoriteGameProvider.removeFavoriteGame(
-            game!.idGame
+        if (GamePresenter(
+            gameUseCaseProtocol: GameInjection.init()
+            .provideGameUseCase())
+            .removeFavoriteGame(
+                game!.idGame
+            )
         ){
-            DispatchQueue.main.async {
-                let alert = UIAlertController(title: "Successful", message: "\(self.game!.nameGame!) has removed from favorite game.", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
-                    self.isFavorite = false
-                    self.favoriteGame.tintColor = UIColor.systemGray4
-                })
-                self.present(alert, animated: true, completion: nil)
-            }
+            let alert = UIAlertController(title: "Successful", message: "\(self.game!.nameGame!) has removed from favorite game.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+                self.isFavorite = false
+                self.favoriteGame.tintColor = UIColor.systemGray4
+            })
+            self.present(alert, animated: true, completion: nil)
         }
+        
+//        favoriteGameProvider.removeFavoriteGame(
+//            game!.idGame
+//        ){
+//            DispatchQueue.main.async {
+//                let alert = UIAlertController(title: "Successful", message: "\(self.game!.nameGame!) has removed from favorite game.", preferredStyle: .alert)
+//                alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+//                    self.isFavorite = false
+//                    self.favoriteGame.tintColor = UIColor.systemGray4
+//                })
+//                self.present(alert, animated: true, completion: nil)
+//            }
+//        }
+        
     }
 }

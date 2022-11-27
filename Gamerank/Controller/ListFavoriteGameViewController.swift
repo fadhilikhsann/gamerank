@@ -11,28 +11,43 @@ class ListFavoriteGameViewController: UIViewController {
     
     var tempIndexPath: IndexPath = []
     var tempIdGame: Int = 0
-    private var favoriteGames: [GameModel]? = nil
+//    private var favoriteGame: [GameModel]? = nil
+    private var favoriteGame: [GameEntity]? = nil
     let dateFormat = DateFormat()
     private let _pendingOperations = PendingOperations()
     @IBOutlet weak var favoriteGameTableView: UITableView!
-    private lazy var favoriteGameProvider: FavoriteGameProvider = { return FavoriteGameProvider() }()
+    
+//    private lazy var favoriteGameProvider: FavoriteGameProvider = { return FavoriteGameProvider() }()
     
     override func viewWillAppear(_ animated: Bool) {
         if tempIdGame != 0 {
-            favoriteGameProvider.checkFavoriteGame(
-                tempIdGame
-            ){
-                isFavoriteGame in
-                if !isFavoriteGame {
-                    DispatchQueue.main.async {
-                        self.favoriteGames!.remove(at: self.tempIndexPath.row)
-                        self.favoriteGameTableView.beginUpdates()
-                        self.favoriteGameTableView.deleteRows(at: [self.tempIndexPath], with: .automatic)
-                        self.favoriteGameTableView.endUpdates()
-                    }
-                    
-                }
+            
+            if (!GamePresenter(
+                gameUseCaseProtocol: GameInjection.init()
+                    .provideGameUseCase())
+                .checkFavoriteGame(tempIdGame)
+            ) {
+                self.favoriteGame!.remove(at: self.tempIndexPath.row)
+                self.favoriteGameTableView.beginUpdates()
+                self.favoriteGameTableView.deleteRows(at: [self.tempIndexPath], with: .automatic)
+                self.favoriteGameTableView.endUpdates()
             }
+            
+            //            favoriteGameProvider.checkFavoriteGame(
+            //                tempIdGame
+            //            ){
+            //                isFavoriteGame in
+            //                if !isFavoriteGame {
+            //                    DispatchQueue.main.async {
+            //                        self.favoriteGame!.remove(at: self.tempIndexPath.row)
+            //                        self.favoriteGameTableView.beginUpdates()
+            //                        self.favoriteGameTableView.deleteRows(at: [self.tempIndexPath], with: .automatic)
+            //                        self.favoriteGameTableView.endUpdates()
+            //                    }
+            //
+            //                }
+            //            }
+            
         }
     }
     
@@ -48,13 +63,17 @@ class ListFavoriteGameViewController: UIViewController {
     }
     
     func loadFavoriteGame(){
-        self.favoriteGameProvider.getAllFavoriteGame{
-            result in
-            DispatchQueue.main.async {
-                self.favoriteGames = result
-                self.favoriteGameTableView.reloadData()
-            }
-        }
+        
+        self.favoriteGame = GamePresenter(gameUseCaseProtocol: GameInjection.init().provideGameUseCase()).getAllFavoriteGame()
+//        self.favoriteGameTableView.reloadData()
+        
+//        self.favoriteGameProvider.getAllFavoriteGame{
+//            result in
+//            DispatchQueue.main.async {
+//                self.favoriteGame = result
+//                self.favoriteGameTableView.reloadData()
+//            }
+//        }
     }
     
 }
@@ -62,7 +81,7 @@ class ListFavoriteGameViewController: UIViewController {
 extension ListFavoriteGameViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return favoriteGames?.count ?? 0
+        return favoriteGame?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -71,7 +90,7 @@ extension ListFavoriteGameViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let game = favoriteGames?[indexPath.row]
+        let game = favoriteGame?[indexPath.row]
         cell.layoutMargins = UIEdgeInsets.zero
         cell.gameNameLabel.text = game?.nameGame
         let formatter = DateFormatter()
@@ -98,11 +117,11 @@ extension ListFavoriteGameViewController: UITableViewDataSource {
 extension ListFavoriteGameViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detail = DetailGameViewController(nibName: "DetailGameViewController", bundle: nil)
-        
-        detail.game = favoriteGames![indexPath.row]
+
+        detail.game = favoriteGame![indexPath.row]
         tempIndexPath = indexPath
-        tempIdGame = favoriteGames![indexPath.row].idGame
-        
+        tempIdGame = favoriteGame![indexPath.row].idGame
+
         self.navigationController?.pushViewController(detail, animated: true)
     }
 }
@@ -118,13 +137,35 @@ extension ListFavoriteGameViewController: UIScrollViewDelegate {
 }
 
 extension ListFavoriteGameViewController{
-    fileprivate func startOperations(game: GameModel, indexPath: IndexPath) {
+//    fileprivate func startOperations(game: GameModel, indexPath: IndexPath) {
+//        if game.state == .new {
+//            startDownload(game: game, indexPath: indexPath)
+//        }
+//    }
+//
+//    fileprivate func startDownload(game: GameModel, indexPath: IndexPath) {
+//        guard _pendingOperations.downloadInProgress[indexPath] == nil else { return }
+//        let downloader = ImageDownloader(game: game)
+//        downloader.completionBlock = {
+//            if downloader.isCancelled { return }
+//
+//            DispatchQueue.main.async {
+//                self._pendingOperations.downloadInProgress.removeValue(forKey: indexPath)
+//                self.favoriteGameTableView.reloadRows(at: [indexPath], with: .automatic)
+//            }
+//        }
+//
+//        _pendingOperations.downloadInProgress[indexPath] = downloader
+//        _pendingOperations.downloadQueue.addOperation(downloader)
+//    }
+ 
+    fileprivate func startOperations(game: GameEntity, indexPath: IndexPath) {
         if game.state == .new {
             startDownload(game: game, indexPath: indexPath)
         }
     }
  
-    fileprivate func startDownload(game: GameModel, indexPath: IndexPath) {
+    fileprivate func startDownload(game: GameEntity, indexPath: IndexPath) {
         guard _pendingOperations.downloadInProgress[indexPath] == nil else { return }
         let downloader = ImageDownloader(game: game)
         downloader.completionBlock = {
@@ -139,7 +180,7 @@ extension ListFavoriteGameViewController{
         _pendingOperations.downloadInProgress[indexPath] = downloader
         _pendingOperations.downloadQueue.addOperation(downloader)
     }
- 
+    
     fileprivate func toggleSuspendOperations(isSuspended: Bool) {
         _pendingOperations.downloadQueue.isSuspended = isSuspended
     }
