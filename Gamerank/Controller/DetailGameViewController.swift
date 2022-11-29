@@ -6,13 +6,16 @@
 //
 
 import UIKit
+import RxSwift
 
 class DetailGameViewController: UIViewController {
     
-    //    var game: GameModel? = nil
+    // var game: GameModel? = nil
     var game: GameEntity? = nil
     var isFavorite: Bool = false
     let dateFormat = DateFormat()
+    let disposeBag = DisposeBag()
+    private var viewModel = DetailGameViewModel(gameUseCaseProtocol: GameInjection.init().provideGameUseCase())
     
     @IBOutlet weak var gameImageView: UIImageView!
     @IBOutlet weak var gameNameLabel: UILabel!
@@ -21,7 +24,7 @@ class DetailGameViewController: UIViewController {
     @IBOutlet weak var gameRatingLabel: UILabel!
     @IBOutlet weak var favoriteGame: UIImageView!
     
-//    private lazy var favoriteGameProvider: FavoriteGameProvider = { return FavoriteGameProvider() }()
+    // private lazy var favoriteGameProvider: FavoriteGameProvider = { return FavoriteGameProvider() }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,31 +39,10 @@ class DetailGameViewController: UIViewController {
         
         self.favoriteGame.image = favoriteGame.image?.withRenderingMode(.alwaysTemplate)
         
-        if(GamePresenter(
-            gameUseCaseProtocol: GameInjection.init()
-            .provideGameUseCase())
-            .checkFavoriteGame(game!.idGame)
-        ) {
-            self.isFavorite = true
-            self.favoriteGame.tintColor = UIColor.systemPink
-        }
+        getDescription()
+        checkFavorite()
         
         
-        //        favoriteGameProvider.checkFavoriteGame(
-        //            game!.idGame
-        //        ){
-        //            isFavoriteGame in
-        //            if isFavoriteGame {
-        //                self.isFavorite = true
-        //                DispatchQueue.main.async {
-        //                    self.favoriteGame.tintColor = UIColor.systemPink
-        //                }
-        //
-        //            }
-        //        }
-        
-        self.gameDetailLabel.text = GamePresenter(gameUseCaseProtocol: GameInjection.init().provideGameUseCase())
-            .getDetailGame(idGame: game!.idGame).descriptionGame?.htmlToString ?? ""
         
         if self.game!.imageGame == nil {
             if let imageData = try? Data(contentsOf: self.game!.urlImageGame!){
@@ -76,20 +58,41 @@ class DetailGameViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    func getDescription() {
+        viewModel.getDetailGame(idGame: game!.idGame)
+            .observe(on: MainScheduler.instance)
+            .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
+            .subscribe(onNext: {result in
+
+                self.gameDetailLabel.text = result.descriptionGame?.htmlToString ?? ""
+
+            }
+            )
+            .disposed(by: disposeBag)
+    }
     
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
+    func checkFavorite() {
+        
+        viewModel.checkFavoriteGame(game!.idGame)
+            .observe(on: MainScheduler.instance)
+            .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
+            .subscribe(onNext: {result in
+                if (result) {
+                    self.isFavorite = true
+                    
+                    self.favoriteGame.tintColor = UIColor.systemPink
+                    
+                }
+                
+            }
+            )
+            .disposed(by: disposeBag)
+    }
     
 }
 
 extension DetailGameViewController{
+    
     @objc func imageTapped(sender: UITapGestureRecognizer) {
         print("CLICKED")
         if sender.state == .ended {
@@ -102,76 +105,54 @@ extension DetailGameViewController{
     }
     
     func addFavoriteGame(){
-        print("DI SINI")
-        if (GamePresenter(
-            gameUseCaseProtocol: GameInjection.init()
-            .provideGameUseCase())
-            .addFavoriteGame(
-                game!.idGame,
-                game!.nameGame!,
-                game!.releasedGame!,
-                game!.urlImageGame!,
-                game!.ratingGame
-            )
-        ){
-            print("TRY")
-            let alert = UIAlertController(title: "Successful", message: "\(self.game!.nameGame!) has added to favorite game.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
-                self.isFavorite = true
-                self.favoriteGame.tintColor = UIColor.systemPink
-            })
-            self.present(alert, animated: true, completion: nil)
-        } else {
-            print("gagal")
+        
+        viewModel.addFavoriteGame(
+            game!.idGame,
+            game!.nameGame!,
+            game!.releasedGame!,
+            game!.urlImageGame!,
+            game!.ratingGame
+        )
+        .observe(on: MainScheduler.instance)
+        .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
+        .subscribe(onNext: {result in
+            if (result) {
+                let alert = UIAlertController(title: "Successful", message: "\(self.game!.nameGame!) has added to favorite game.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+                    self.isFavorite = true
+                    self.favoriteGame.tintColor = UIColor.systemPink
+                })
+                self.present(alert, animated: true, completion: nil)
+            } else {
+                print("gagal")
+            }
         }
-        
-//        favoriteGameProvider.addFavoriteGame(
-//            game!.idGame,
-//            game!.nameGame!,
-//            game!.releasedGame!,
-//            game!.urlImageGame!,
-//            game!.ratingGame
-//        ) {
-//            DispatchQueue.main.async {
-//                let alert = UIAlertController(title: "Successful", message: "\(self.game!.nameGame!) has added to favorite game.", preferredStyle: .alert)
-//                alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
-//                    self.isFavorite = true
-//                    self.favoriteGame.tintColor = UIColor.systemPink
-//                })
-//                self.present(alert, animated: true, completion: nil)
-//            }
-//        }
-        
+        )
+        .disposed(by: disposeBag)
+
     }
     
     func removeFavoriteGame(){
-        if (GamePresenter(
-            gameUseCaseProtocol: GameInjection.init()
-            .provideGameUseCase())
-            .removeFavoriteGame(
-                game!.idGame
-            )
-        ){
-            let alert = UIAlertController(title: "Successful", message: "\(self.game!.nameGame!) has removed from favorite game.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
-                self.isFavorite = false
-                self.favoriteGame.tintColor = UIColor.systemGray4
-            })
-            self.present(alert, animated: true, completion: nil)
-        }
         
-//        favoriteGameProvider.removeFavoriteGame(
-//            game!.idGame
-//        ){
-//            DispatchQueue.main.async {
-//                let alert = UIAlertController(title: "Successful", message: "\(self.game!.nameGame!) has removed from favorite game.", preferredStyle: .alert)
-//                alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
-//                    self.isFavorite = false
-//                    self.favoriteGame.tintColor = UIColor.systemGray4
-//                })
-//                self.present(alert, animated: true, completion: nil)
-//            }
-//        }
+        viewModel.removeFavoriteGame(
+            game!.idGame
+        )
+        .observe(on: MainScheduler.instance)
+        .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
+        .subscribe(onNext: {result in
+            if (result) {
+                let alert = UIAlertController(title: "Successful", message: "\(self.game!.nameGame!) has removed from favorite game.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+                    self.isFavorite = false
+                    self.favoriteGame.tintColor = UIColor.systemGray4
+                })
+                self.present(alert, animated: true, completion: nil)
+            } else {
+                print("gagal")
+            }
+        }
+        )
+        .disposed(by: disposeBag)
         
     }
 }

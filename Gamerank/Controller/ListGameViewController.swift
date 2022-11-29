@@ -6,10 +6,14 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class ListGameViewController: UIViewController {
     let dateFormat = DateFormat()
-//    var games:[GameModel]? = nil
+    private var viewModel = ListGameViewModel(gameUseCaseProtocol: GameInjection.init().provideGameUseCase())
+    //    var games:[GameModel]? = nil
+    private var disposeBag = DisposeBag()
     var games:[GameEntity]? = nil
     private let _pendingOperations = PendingOperations()
     @IBOutlet weak var gameTableView: UITableView!
@@ -23,43 +27,29 @@ class ListGameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.prefersLargeTitles = true
-        
-        
-        self.games = GamePresenter(gameUseCaseProtocol: GameInjection.init().provideGameUseCase())
-            .getListGame()
-//        self.gameTableView.reloadData()
-        
-//        apiRequest.request(endPoint: apiEndPoint.getListGame(),{
-//            result in
-//
-//            switch result {
-//            case .failure(let error):
-//                print(error)
-//                break
-//            case .success(let data):
-//                let decoder = JSONDecoder()
-//
-//                if let gamesData = try? decoder.decode(RootModel.self, from: data.0) as RootModel {
-//
-//                    self.games = gamesData.listGame!
-//
-//                    DispatchQueue.main.async {
-//                        self.gameTableView.reloadData()
-//                    }
-//
-//                } else {
-//                    print("ERROR: Can't Decode JSON")
-//                }
-//                break
-//            }
-//
-//        })
+        loadListGameData()
         
         self.gameTableView.dataSource = self
-        
         self.gameTableView.delegate = self
         
         gameTableView.register(UINib(nibName: "GameTableViewCell", bundle: nil), forCellReuseIdentifier: "GameCell")
+    }
+    
+    
+    private func loadListGameData() {
+        viewModel.getListGame()
+            .observe(on: MainScheduler.instance)
+            .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
+            .subscribe(onNext: {result in
+                if(result.count > 0) {
+                    self.games = result
+                    self.gameTableView.reloadData()
+                    print("masukkkk")
+                }
+            }
+            )
+            .disposed(by: disposeBag)
+        
     }
     
     @IBAction func showProfile(_ sender: Any) {
@@ -123,7 +113,7 @@ extension ListGameViewController: UITableViewDelegate {
         detail.modalPresentationStyle = .popover
         
         self.navigationController?.pushViewController(detail, animated: true)
-//        self.present(detail, animated: true)
+        //        self.present(detail, animated: true)
     }
 }
 
@@ -137,28 +127,7 @@ extension ListGameViewController: UIScrollViewDelegate {
     }
 }
 
-extension ListGameViewController{
-//    fileprivate func startOperations(game: GameModel, indexPath: IndexPath) {
-//        if game.state == .new {
-//            startDownload(game: game, indexPath: indexPath)
-//        }
-//    }
-//
-//    fileprivate func startDownload(game: GameModel, indexPath: IndexPath) {
-//        guard _pendingOperations.downloadInProgress[indexPath] == nil else { return }
-//        let downloader = ImageDownloader(game: game)
-//        downloader.completionBlock = {
-//            if downloader.isCancelled { return }
-//
-//            DispatchQueue.main.async {
-//                self._pendingOperations.downloadInProgress.removeValue(forKey: indexPath)
-//                self.gameTableView.reloadRows(at: [indexPath], with: .automatic)
-//            }
-//        }
-//
-//        _pendingOperations.downloadInProgress[indexPath] = downloader
-//        _pendingOperations.downloadQueue.addOperation(downloader)
-//    }
+extension ListGameViewController {
     
     fileprivate func startOperations(game: GameEntity, indexPath: IndexPath) {
         if game.state == .new {

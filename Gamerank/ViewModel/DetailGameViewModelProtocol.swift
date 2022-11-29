@@ -1,33 +1,28 @@
 //
-//  ApiPresenterProtocol.swift
+//  DetailGameViewModelProtocol.swift
 //  Gamerank
 //
-//  Created by Fadhil Ikhsanta on 26/11/22.
+//  Created by Fadhil Ikhsanta on 28/11/22.
 //
 
 import Foundation
+import RxSwift
 
-protocol GamePresenterProtocol {
-    func getListGame(
-    ) -> [GameEntity]
+protocol DetailGameViewModelProtocol {
     func getDetailGame(
         idGame: Int
-    ) -> GameEntity
-    func getAllFavoriteGame(
-    ) -> [GameEntity]
+    ) -> Observable<GameEntity>
     func addFavoriteGame(
         _ idGame: Int,
         _ nameGame: String,
         _ releasedGame: Date,
         _ urlImageGame: URL,
         _ ratingGame: Double
-    ) -> Bool
+    ) -> Observable<Bool>
     func removeFavoriteGame(
         _ id: Int
-    ) -> Bool
+    ) -> Observable<Bool>
     func checkFavoriteGame(
         _ id: Int
-    ) -> Bool
-    func removeAllFavoriteGame(
-    ) -> Bool
+    ) -> Observable<Bool>
 }

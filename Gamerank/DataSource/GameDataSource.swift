@@ -202,17 +202,17 @@ extension GameDataSource: GameCDProtocol {
         taskContext.performAndWait {
             if let entity = NSEntityDescription.entity(forEntityName: "Game", in: taskContext) {
                 let game = NSManagedObject(entity: entity, insertInto: taskContext)
-                    game.setValue(idGame, forKeyPath: "id")
-                    game.setValue(nameGame, forKeyPath: "name")
-                    game.setValue(releasedGame, forKeyPath: "releasedDate")
-                    game.setValue(urlImageGame, forKeyPath: "urlImage")
-                    game.setValue(ratingGame, forKeyPath: "rating")
-                    do {
-                        try taskContext.save()
-                        isSuccess = true
-                    } catch let error as NSError {
-                        print("Could not save. \(error), \(error.userInfo)")
-                    }
+                game.setValue(idGame, forKeyPath: "id")
+                game.setValue(nameGame, forKeyPath: "name")
+                game.setValue(releasedGame, forKeyPath: "releasedDate")
+                game.setValue(urlImageGame, forKeyPath: "urlImage")
+                game.setValue(ratingGame, forKeyPath: "rating")
+                do {
+                    try taskContext.save()
+                    isSuccess = true
+                } catch let error as NSError {
+                    print("Could not save. \(error), \(error.userInfo)")
+                }
             }
             task.leave()
         }

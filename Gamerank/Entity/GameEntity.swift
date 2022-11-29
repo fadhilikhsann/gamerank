@@ -73,4 +73,6 @@ class GameEntity:Codable{
         self.urlImageGame = urlImage
         self.ratingGame = ratingGame
     }
+    
+    init(){}
 }
