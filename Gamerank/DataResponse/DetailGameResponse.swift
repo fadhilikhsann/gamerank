@@ -1,16 +1,13 @@
 //
-//  GameModel.swift
+//  ApiGameEntity.swift
 //  Gamerank
 //
-//  Created by Fadhil Ikhsanta on 14/06/22.
+//  Created by Fadhil Ikhsanta on 26/11/22.
 //
 
 import Foundation
-import UIKit
 
-
-
-class GameModel:Codable{
+struct DetailGameResponse: Codable {
     var idGame: Int = 0
     var nameGame: String? = nil
     var releasedGame: Date? = nil
@@ -18,9 +15,6 @@ class GameModel:Codable{
     var ratingGame: Double = 0.0
     var descriptionGame: String? = nil
     var metacriticGame: Int = 0
-    
-    var imageGame: UIImage? = nil
-    var state: DownloadState = .new
     
     
     enum CodingKeys: String, CodingKey{
@@ -35,7 +29,7 @@ class GameModel:Codable{
         
     }
     
-    required init(from decoder: Decoder) throws {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         idGame = try container.decodeIfPresent(Int.self, forKey: .idGame) ?? 0
@@ -59,16 +53,18 @@ class GameModel:Codable{
     }
     
     init(
-        forId idGame:Int,
-        forName nameGame:String,
-        forReleasedDate releasedDate:Date,
-        forUrlImage urlImage:URL,
-        forRating ratingGame:Double
+        forId idGame: Int,
+        forName nameGame: String,
+        forReleasedDate releasedDate: Date,
+        forUrlImage urlImage: URL,
+        forRating ratingGame: Double,
+        forDescription descriptionGame: String
     ){
         self.idGame = idGame
         self.nameGame = nameGame
         self.releasedGame = releasedDate
         self.urlImageGame = urlImage
         self.ratingGame = ratingGame
+        self.descriptionGame = descriptionGame
     }
 }

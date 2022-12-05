@@ -13,7 +13,7 @@ class ListFavoriteGameViewController: UIViewController {
     var tempIndexPath: IndexPath = []
     var tempIdGame: Int = 0
 //    private var favoriteGame: [GameModel]? = nil
-    private var favoriteGame: [GameEntity]? = nil
+    private var favoriteGame: [ListGameUIModel]? = nil
     let disposeBag = DisposeBag()
     let dateFormat = DateFormat()
     private let _pendingOperations = PendingOperations()
@@ -112,7 +112,9 @@ extension ListFavoriteGameViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detail = DetailGameViewController(nibName: "DetailGameViewController", bundle: nil)
 
-        detail.game = favoriteGame![indexPath.row]
+        detail.idGame = favoriteGame![indexPath.row].idGame
+        detail.imageGame = favoriteGame![indexPath.row].imageGame
+        
         tempIndexPath = indexPath
         tempIdGame = favoriteGame![indexPath.row].idGame
 
@@ -131,13 +133,13 @@ extension ListFavoriteGameViewController: UIScrollViewDelegate {
 }
 
 extension ListFavoriteGameViewController{
-    fileprivate func startOperations(game: GameEntity, indexPath: IndexPath) {
+    fileprivate func startOperations(game: ListGameUIModel, indexPath: IndexPath) {
         if game.state == .new {
             startDownload(game: game, indexPath: indexPath)
         }
     }
  
-    fileprivate func startDownload(game: GameEntity, indexPath: IndexPath) {
+    fileprivate func startDownload(game: ListGameUIModel, indexPath: IndexPath) {
         guard _pendingOperations.downloadInProgress[indexPath] == nil else { return }
         let downloader = ImageDownloader(game: game)
         downloader.completionBlock = {

@@ -14,7 +14,7 @@ class ListGameViewController: UIViewController {
     private var viewModel = ListGameViewModel(gameUseCaseProtocol: GameInjection.init().provideGameUseCase())
     //    var games:[GameModel]? = nil
     private var disposeBag = DisposeBag()
-    var games:[GameEntity]? = nil
+    var games:[ListGameUIModel]? = nil
     private let _pendingOperations = PendingOperations()
     @IBOutlet weak var gameTableView: UITableView!
     
@@ -109,7 +109,9 @@ extension ListGameViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detail = DetailGameViewController(nibName: "DetailGameViewController", bundle: nil)
         
-        detail.game = games![indexPath.row]
+        detail.idGame = games![indexPath.row].idGame
+        detail.imageGame = games![indexPath.row].imageGame
+        
         detail.modalPresentationStyle = .popover
         
         self.navigationController?.pushViewController(detail, animated: true)
@@ -129,13 +131,13 @@ extension ListGameViewController: UIScrollViewDelegate {
 
 extension ListGameViewController {
     
-    fileprivate func startOperations(game: GameEntity, indexPath: IndexPath) {
+    fileprivate func startOperations(game: ListGameUIModel, indexPath: IndexPath) {
         if game.state == .new {
             startDownload(game: game, indexPath: indexPath)
         }
     }
     
-    fileprivate func startDownload(game: GameEntity, indexPath: IndexPath) {
+    fileprivate func startDownload(game: ListGameUIModel, indexPath: IndexPath) {
         guard _pendingOperations.downloadInProgress[indexPath] == nil else { return }
         let downloader = ImageDownloader(game: game)
         downloader.completionBlock = {

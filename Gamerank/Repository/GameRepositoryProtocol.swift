@@ -6,28 +6,29 @@
 //
 
 import Foundation
+import RxSwift
 
 protocol GameRepositoryProtocol {
     func getListGameResponse(
-    ) -> [GameEntity]
+    ) -> Observable<[ListGameEntity]>
     func getDetailGameResponse(
         idGame: Int
-    ) -> GameEntity
+    ) -> Observable<DetailGameEntity>
     func getAllFavoriteGameResponse(
-    ) -> [GameEntity]
+    ) -> Observable<[ListGameEntity]>
     func addFavoriteGame(
         _ idGame: Int,
         _ nameGame: String,
         _ releasedGame: Date,
         _ urlImageGame: URL,
         _ ratingGame: Double
-    ) -> Bool
+    ) -> Observable<Bool>
     func removeFavoriteGame(
         _ id: Int
-    ) -> Bool
+    ) -> Observable<Bool>
     func checkFavoriteGame(
         _ id: Int
-    ) -> Bool
+    ) -> Observable<Bool>
     func removeAllFavoriteGame(
-    ) -> Bool
+    ) -> Observable<Bool>
 }

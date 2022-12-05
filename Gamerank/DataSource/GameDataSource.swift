@@ -7,13 +7,12 @@
 
 import Foundation
 import CoreData
+import RxSwift
 
 class GameDataSource {
     let key: String = "464b5d9e21aa405eb22a7afe999aae76"
     var path: String? = nil
-    var queryItems: [URLQueryItem]? = nil
-    var listGame: [GameEntity]? = []
-    var detailGame: GameEntity? = nil
+    var queryItems: [URLQueryItem] = []
     var idGame: Int = 0
 }
 
@@ -56,9 +55,10 @@ extension GameDataSource: GameAPIProtocol {
         
     }
     
-    func getListGame() -> [GameEntity] {
+    func getListGame() -> Observable<[ListGameEntity]> {
         print("getListGameDataSource")
         
+        var listGame: [ListGameEntity] = []
         let task = DispatchGroup()
         task.enter()
         getResponse(
@@ -78,9 +78,22 @@ extension GameDataSource: GameAPIProtocol {
                 case .success(let data):
                     let decoder = JSONDecoder()
                     
-                    if let gamesData = try? decoder.decode(ApiRootEntity.self, from: data.0) as ApiRootEntity {
+                    if let gamesData = try? decoder.decode(GameResponse.self, from: data.0) as GameResponse {
                         print("Jumlah data: \(gamesData.listGame!.count)")
-                        self.listGame = gamesData.listGame!
+                        
+                        for result in gamesData.listGame! {
+                            let game = ListGameEntity(
+                                forId: result.idGame,
+                                forName: result.nameGame!,
+                                forReleasedDate: result.releasedGame!,
+                                forUrlImage: result.urlImageGame!,
+                                forRating: result.ratingGame
+                            )
+                            listGame.append(game)
+                        }
+                        
+                        
+                        
                     } else {
                         print("ERROR: Can't Decode JSON")
                     }
@@ -90,13 +103,15 @@ extension GameDataSource: GameAPIProtocol {
             }
         )
         task.wait()
-        print("Jumlah datanya: \(self.listGame!.count)")
-        return self.listGame!
+        print("Jumlah datanya: \(listGame.count)")
+        return Observable.from(optional: listGame)
         
     }
     
-    func getDetailGame(idGame: Int) -> GameEntity {
+    func getDetailGame(idGame: Int) -> Observable<DetailGameEntity> {
         print("getDetailGameDataSource")
+        
+        var detailGame: DetailGameEntity? = nil
         let task = DispatchGroup()
         task.enter()
         getResponse(
@@ -115,13 +130,20 @@ extension GameDataSource: GameAPIProtocol {
                 case .success(let data):
                     let decoder = JSONDecoder()
                     
-                    if let gameData = try? decoder.decode(GameEntity.self, from: data.0) as GameEntity {
+                    if let gameData = try? decoder.decode(DetailGameResponse.self, from: data.0) as DetailGameResponse {
                         
-                        self.detailGame = gameData
+                        detailGame = DetailGameEntity(
+                            forId: gameData.idGame,
+                            forName: gameData.nameGame!,
+                            forReleasedDate: gameData.releasedGame!,
+                            forUrlImage: gameData.urlImageGame!,
+                            forRating: gameData.ratingGame,
+                            forDescription: gameData.descriptionGame!
+                        )
                         
                     } else {
                         print("ERROR: Can't Decode JSON")
-                        self.detailGame = nil
+                        detailGame = nil
                     }
                     break
                 }
@@ -129,7 +151,7 @@ extension GameDataSource: GameAPIProtocol {
             }
         )
         task.wait()
-        return self.detailGame!
+        return Observable.from(optional: detailGame!)
     }
 }
 
@@ -158,10 +180,10 @@ extension GameDataSource: GameCDProtocol {
         return taskContext
     }
     
-    func getAllFavoriteGame() -> [GameEntity] {
+    func getAllFavoriteGame() -> Observable<[ListGameEntity]>{
         print("getAllFavoriteGameDataSource")
         let taskContext = newTaskContext()
-        var games: [GameEntity] = []
+        var listGame: [ListGameEntity] = []
         let task = DispatchGroup()
         task.enter()
         taskContext.perform {
@@ -170,14 +192,14 @@ extension GameDataSource: GameCDProtocol {
                 let results = try taskContext.fetch(fetchRequest)
                 
                 for result in results {
-                    let game = GameEntity(
+                    let game = ListGameEntity(
                         forId: (result.value(forKeyPath: "id") as! Int),
                         forName: (result.value(forKeyPath: "name") as! String),
                         forReleasedDate: (result.value(forKeyPath: "releasedDate") as! Date),
                         forUrlImage: (result.value(forKeyPath: "urlImage") as! URL),
                         forRating: (result.value(forKeyPath: "rating") as! Double)
                     )
-                    games.append(game)
+                    listGame.append(game)
                 }
             } catch let error as NSError {
                 print("Could not fetch. \(error), \(error.userInfo)")
@@ -185,7 +207,7 @@ extension GameDataSource: GameCDProtocol {
             task.leave()
         }
         task.wait()
-        return games
+        return Observable.from(optional: listGame)
     }
     
     func addFavoriteGame(
@@ -194,7 +216,7 @@ extension GameDataSource: GameCDProtocol {
         _ releasedGame: Date,
         _ urlImageGame: URL,
         _ ratingGame: Double
-    ) -> Bool {
+    ) -> Observable<Bool> {
         let taskContext = newTaskContext()
         let task = DispatchGroup()
         var isSuccess: Bool = false
@@ -217,12 +239,12 @@ extension GameDataSource: GameCDProtocol {
             task.leave()
         }
         task.wait()
-        return isSuccess
+        return Observable.from(optional: isSuccess)
     }
     
     func removeFavoriteGame(
         _ id: Int
-    ) -> Bool {
+    ) -> Observable<Bool> {
         let taskContext = newTaskContext()
         let task = DispatchGroup()
         var isSuccess: Bool = false
@@ -241,12 +263,12 @@ extension GameDataSource: GameCDProtocol {
             task.leave()
         }
         task.wait()
-        return isSuccess
+        return Observable.from(optional: isSuccess)
     }
     
     func checkFavoriteGame(
         _ id: Int
-    ) -> Bool {
+    ) -> Observable<Bool> {
         let taskContext = newTaskContext()
         let task = DispatchGroup()
         var isSuccess: Bool = false
@@ -273,10 +295,10 @@ extension GameDataSource: GameCDProtocol {
             task.leave()
         }
         task.wait()
-        return isSuccess
+        return Observable.from(optional: isSuccess)
     }
     
-    func removeAllFavoriteGame() -> Bool {
+    func removeAllFavoriteGame() -> Observable<Bool> {
         let taskContext = newTaskContext()
         let task = DispatchGroup()
         var isSuccess: Bool = false
@@ -293,6 +315,6 @@ extension GameDataSource: GameCDProtocol {
             task.leave()
         }
         task.wait()
-        return isSuccess
+        return Observable.from(optional: isSuccess)
     }
 }

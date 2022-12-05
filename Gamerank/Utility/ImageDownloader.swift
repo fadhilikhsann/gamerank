@@ -8,17 +8,15 @@
 import Foundation
 import UIKit
 
+enum DownloadState {
+    case new, downloaded, failed
+}
+
 class ImageDownloader: Operation {
+
+    private var _game: ListGameUIModel
  
-//    private var _game: GameModel
-//
-//    init(game: GameModel) {
-//        _game = game
-//    }
- 
-    private var _game: GameEntity
- 
-    init(game: GameEntity) {
+    init(game: ListGameUIModel) {
         _game = game
     }
     
@@ -26,13 +24,13 @@ class ImageDownloader: Operation {
         if isCancelled {
             return
         }
- 
+
         guard let imageData = try? Data(contentsOf: _game.urlImageGame!) else { return }
  
         if isCancelled {
             return
         }
- 
+
         if !imageData.isEmpty {
             _game.imageGame = UIImage(data: imageData)
             _game.state = .downloaded

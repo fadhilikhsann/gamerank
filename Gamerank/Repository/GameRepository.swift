@@ -6,11 +6,13 @@
 //
 
 import Foundation
+import RxSwift
 
 class GameRepository: GameRepositoryProtocol {
    
     private let gameAPIProtocol: GameAPIProtocol
     private let gameCDProtocol: GameCDProtocol
+    private var disposeBag = DisposeBag()
     
     init(
         gameAPIProtocol: GameAPIProtocol,
@@ -20,19 +22,30 @@ class GameRepository: GameRepositoryProtocol {
         self.gameCDProtocol = gameCDProtocol
     }
     
-    func getListGameResponse() -> [GameEntity] {
+    func getListGameResponse() -> Observable<[ListGameEntity]> {
         print("getListGameRepository")
+        
         return gameAPIProtocol.getListGame()
+            .map{$0}
+            .observe(on: MainScheduler.instance)
+            .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
+      
     }
     
-    func getDetailGameResponse(idGame: Int) -> GameEntity {
+    func getDetailGameResponse(idGame: Int) -> Observable<DetailGameEntity> {
         print("getDetailGameRepository")
         return gameAPIProtocol.getDetailGame(idGame: idGame)
+            .map{$0}
+            .observe(on: MainScheduler.instance)
+            .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
     }
     
-    func getAllFavoriteGameResponse() -> [GameEntity] {
+    func getAllFavoriteGameResponse() -> Observable<[ListGameEntity]> {
         print("getAllFavoriteGamesRepository")
         return gameCDProtocol.getAllFavoriteGame()
+            .map{$0}
+            .observe(on: MainScheduler.instance)
+            .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
     }
     
     func addFavoriteGame(
@@ -41,7 +54,7 @@ class GameRepository: GameRepositoryProtocol {
         _ releasedGame: Date,
         _ urlImageGame: URL,
         _ ratingGame: Double
-    ) -> Bool {
+    ) -> Observable<Bool> {
         print("addFavoriteGamesRepository")
         return gameCDProtocol.addFavoriteGame(
             idGame,
@@ -50,22 +63,34 @@ class GameRepository: GameRepositoryProtocol {
             urlImageGame,
             ratingGame
         )
+        .map{$0}
+        .observe(on: MainScheduler.instance)
+        .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
     }
     
     func removeFavoriteGame(
         _ id: Int
-    ) -> Bool {
+    ) -> Observable<Bool> {
         return gameCDProtocol.removeFavoriteGame(id)
+            .map{$0}
+            .observe(on: MainScheduler.instance)
+            .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
     }
     
     func checkFavoriteGame(
         _ id: Int
-    ) -> Bool {
+    ) -> Observable<Bool> {
         return gameCDProtocol.checkFavoriteGame(id)
+            .map{$0}
+            .observe(on: MainScheduler.instance)
+            .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
     }
     
     func removeAllFavoriteGame(
-    ) -> Bool {
+    ) -> Observable<Bool> {
         return gameCDProtocol.removeAllFavoriteGame()
+            .map{$0}
+            .observe(on: MainScheduler.instance)
+            .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
     }
 }

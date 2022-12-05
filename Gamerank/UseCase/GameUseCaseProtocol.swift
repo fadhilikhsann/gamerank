@@ -6,29 +6,30 @@
 //
 
 import Foundation
+import RxSwift
 
 protocol GameUseCaseProtocol {
     func getDetailGame(
         idGame: Int
-    ) -> GameEntity
+    ) -> Observable<DetailGameModel>
     func getListGame(
-    ) -> [GameEntity]
+    ) -> Observable<[ListGameModel]>
     func getAllFavoriteGame(
-    ) -> [GameEntity]
+    ) -> Observable<[ListGameModel]>
     func addFavoriteGame(
         _ idGame: Int,
         _ nameGame: String,
         _ releasedGame: Date,
         _ urlImageGame: URL,
         _ ratingGame: Double
-    ) -> Bool
+    ) -> Observable<Bool>
     func removeFavoriteGame(
         _ id: Int
-    ) -> Bool
+    ) -> Observable<Bool>
     func checkFavoriteGame(
         _ id: Int
-    ) -> Bool
+    ) -> Observable<Bool>
     func removeAllFavoriteGame(
-    ) -> Bool
+    ) -> Observable<Bool>
 }
 

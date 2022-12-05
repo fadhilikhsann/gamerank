@@ -10,19 +10,26 @@ import RxSwift
 
 class DetailGameViewModel: DetailGameViewModelProtocol {
     
-    lazy var detailGame = BehaviorSubject(value: GameEntity())
-    lazy var addFavGame = BehaviorSubject(value: Bool())
-    lazy var removeFavGame = BehaviorSubject(value: Bool())
-    lazy var checkFavGame = BehaviorSubject(value: Bool())
-    
     private let gameUseCaseProtocol: GameUseCaseProtocol
     init(gameUseCaseProtocol: GameUseCaseProtocol) {
         self.gameUseCaseProtocol = gameUseCaseProtocol
     }
     
-    func getDetailGame(idGame: Int) -> Observable<GameEntity> {
+    func getDetailGame(idGame: Int) -> Observable<DetailGameUIModel> {
         
-        return Observable.from(optional: gameUseCaseProtocol.getDetailGame(idGame: idGame))
+        return gameUseCaseProtocol.getDetailGame(idGame: idGame)
+            .map{
+                return DetailGameUIModel(
+                    forId: $0.idGame,
+                    forName: $0.nameGame!,
+                    forReleasedDate: $0.releasedGame!,
+                    forUrlImage: $0.urlImageGame!,
+                    forRating: $0.ratingGame,
+                    forDescription: $0.descriptionGame!
+                )
+            }
+            .observe(on: MainScheduler.instance)
+            .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
         
     }
     
@@ -34,14 +41,17 @@ class DetailGameViewModel: DetailGameViewModelProtocol {
         _ ratingGame: Double
     ) -> Observable<Bool> {
         
-        return Observable.from(optional: gameUseCaseProtocol.addFavoriteGame(
+        return gameUseCaseProtocol.addFavoriteGame(
             idGame,
             nameGame,
             releasedGame,
             urlImageGame,
             ratingGame
         )
-        )
+        .map{$0}
+        .observe(on: MainScheduler.instance)
+        .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
+        
         
     }
     
@@ -49,7 +59,10 @@ class DetailGameViewModel: DetailGameViewModelProtocol {
         _ id: Int
     ) -> Observable<Bool> {
         
-        return Observable.from(optional: gameUseCaseProtocol.removeFavoriteGame(id))
+        return gameUseCaseProtocol.removeFavoriteGame(id)
+            .map{$0}
+            .observe(on: MainScheduler.instance)
+            .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
         
     }
     
@@ -57,7 +70,10 @@ class DetailGameViewModel: DetailGameViewModelProtocol {
         _ id: Int
     ) -> Observable<Bool> {
 
-        return Observable.from(optional: gameUseCaseProtocol.checkFavoriteGame(id))
+        return gameUseCaseProtocol.checkFavoriteGame(id)
+            .map{$0}
+            .observe(on: MainScheduler.instance)
+            .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
         
     }
     

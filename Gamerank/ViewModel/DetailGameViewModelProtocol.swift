@@ -11,7 +11,7 @@ import RxSwift
 protocol DetailGameViewModelProtocol {
     func getDetailGame(
         idGame: Int
-    ) -> Observable<GameEntity>
+    ) -> Observable<DetailGameUIModel>
     func addFavoriteGame(
         _ idGame: Int,
         _ nameGame: String,

@@ -16,9 +16,25 @@ class ListFavoriteGameViewModel: ListFavoriteGameViewModelProtocol {
     }
     
     func getAllFavoriteGame(
-    ) -> Observable<[GameEntity]> {
+    ) -> Observable<[ListGameUIModel]> {
         
-        return Observable.from(optional: gameUseCaseProtocol.getAllFavoriteGame())
+        return gameUseCaseProtocol.getAllFavoriteGame()
+            .map{
+                var listGame: [ListGameUIModel] = []
+                for result in $0 {
+                    let game = ListGameUIModel(
+                        forId: result.idGame,
+                        forName: result.nameGame!,
+                        forReleasedDate: result.releasedGame!,
+                        forUrlImage: result.urlImageGame!,
+                        forRating: result.ratingGame
+                    )
+                    listGame.append(game)
+                }
+                return listGame
+            }
+            .observe(on: MainScheduler.instance)
+            .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
         
     }
     
@@ -26,14 +42,20 @@ class ListFavoriteGameViewModel: ListFavoriteGameViewModelProtocol {
         _ id: Int
     ) -> Observable<Bool> {
         
-        return Observable.from(optional: gameUseCaseProtocol.checkFavoriteGame(id))
+        return gameUseCaseProtocol.checkFavoriteGame(id)
+            .map{$0}
+            .observe(on: MainScheduler.instance)
+            .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
         
     }
 
     func removeAllFavoriteGame(
     ) -> Observable<Bool> {
         
-        return Observable.from(optional: gameUseCaseProtocol.removeAllFavoriteGame())
+        return gameUseCaseProtocol.removeAllFavoriteGame()
+            .map{$0}
+            .observe(on: MainScheduler.instance)
+            .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
         
     }
     

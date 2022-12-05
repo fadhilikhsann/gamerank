@@ -10,7 +10,7 @@ import RxSwift
 
 protocol ListFavoriteGameViewModelProtocol {
     func getAllFavoriteGame(
-    ) -> Observable<[GameEntity]>
+    ) -> Observable<[ListGameUIModel]>
     func checkFavoriteGame(
         _ id: Int
     ) -> Observable<Bool>

@@ -1,28 +1,19 @@
 //
-//  ApiGameEntity.swift
+//  ListGameEntity.swift
 //  Gamerank
 //
-//  Created by Fadhil Ikhsanta on 26/11/22.
+//  Created by Fadhil Ikhsanta on 05/12/22.
 //
 
 import Foundation
-import UIKit
 
-//enum DownloadState {
-//    case new, downloaded, failed
-//}
-
-class GameEntity:Codable{
+struct ListGameResponse: Codable {
     var idGame: Int = 0
     var nameGame: String? = nil
     var releasedGame: Date? = nil
     var urlImageGame: URL? = nil
     var ratingGame: Double = 0.0
-    var descriptionGame: String? = nil
     var metacriticGame: Int = 0
-    
-    var imageGame: UIImage? = nil
-    var state: DownloadState = .new
     
     
     enum CodingKeys: String, CodingKey{
@@ -32,12 +23,11 @@ class GameEntity:Codable{
         case releasedGame = "released"
         case urlImageGame = "background_image"
         case ratingGame = "rating"
-        case descriptionGame = "description"
         case metacriticGame = "metacritic"
         
     }
     
-    required init(from decoder: Decoder) throws {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         idGame = try container.decodeIfPresent(Int.self, forKey: .idGame) ?? 0
@@ -52,9 +42,7 @@ class GameEntity:Codable{
         
         urlImageGame = try container.decodeIfPresent(URL.self, forKey: .urlImageGame)
         ratingGame = try container.decodeIfPresent(Double.self, forKey: .ratingGame) ?? 0.0
-        if let descriptionGame = try? container.decode(String.self, forKey: .descriptionGame) {
-            self.descriptionGame = descriptionGame
-        }
+       
         if let metacriticGame = try? container.decode(Int.self, forKey: .metacriticGame) {
             self.metacriticGame = metacriticGame
         }
@@ -73,6 +61,4 @@ class GameEntity:Codable{
         self.urlImageGame = urlImage
         self.ratingGame = ratingGame
     }
-    
-    init(){}
 }

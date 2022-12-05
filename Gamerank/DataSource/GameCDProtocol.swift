@@ -7,24 +7,25 @@
 
 import Foundation
 import CoreData
+import RxSwift
 
 protocol GameCDProtocol {
     var persistentContainer: NSPersistentContainer { get }
     func newTaskContext() -> NSManagedObjectContext
-    func getAllFavoriteGame() -> [GameEntity]
+    func getAllFavoriteGame() -> Observable<[ListGameEntity]>
     func addFavoriteGame(
         _ idGame: Int,
         _ nameGame: String,
         _ releasedGame: Date,
         _ urlImageGame: URL,
         _ ratingGame: Double
-    ) -> Bool
+    ) -> Observable<Bool>
     func removeFavoriteGame(
         _ id: Int
-    ) -> Bool
+    ) -> Observable<Bool>
     func checkFavoriteGame(
         _ id: Int
-    ) -> Bool
+    ) -> Observable<Bool>
     func removeAllFavoriteGame(
-    ) -> Bool
+    ) -> Observable<Bool>
 }

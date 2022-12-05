@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RxSwift
 
 protocol GameAPIProtocol {
     var url: URL? { get }
@@ -14,7 +15,7 @@ protocol GameAPIProtocol {
         queryItems: [URLQueryItem],
         _ completion: @escaping (Result<(Data, URLResponse), Error>) -> Void
     )
-    func getListGame() -> [GameEntity]
-    func getDetailGame(idGame: Int) -> GameEntity
-    func getAllFavoriteGame() -> [GameEntity]
+    func getListGame() -> Observable<[ListGameEntity]>
+    func getDetailGame(idGame: Int) -> Observable<DetailGameEntity>
+    func getAllFavoriteGame() -> Observable<[ListGameEntity]>
 }

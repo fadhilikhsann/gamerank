@@ -13,7 +13,7 @@ class PendingOperations {
  
     lazy var downloadQueue: OperationQueue = {
         var queue = OperationQueue()
-        queue.name = "com.dicoding.imagedownload"
+        queue.name = "com.fadhilikhsann.imagedownload"
         queue.maxConcurrentOperationCount = 2
         return queue
     }()

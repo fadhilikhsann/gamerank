@@ -10,5 +10,5 @@ import RxSwift
 
 protocol ListGameViewModelProtocol {
     func getListGame(
-    ) -> Observable<[GameEntity]>
+    ) -> Observable<[ListGameUIModel]>
 }

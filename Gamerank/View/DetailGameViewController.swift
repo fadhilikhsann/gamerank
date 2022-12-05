@@ -10,8 +10,9 @@ import RxSwift
 
 class DetailGameViewController: UIViewController {
     
-    // var game: GameModel? = nil
-    var game: GameEntity? = nil
+    var detailGame: DetailGameUIModel? = nil
+    var idGame: Int = 0
+    var imageGame: UIImage? = nil
     var isFavorite: Bool = false
     let dateFormat = DateFormat()
     let disposeBag = DisposeBag()
@@ -24,18 +25,11 @@ class DetailGameViewController: UIViewController {
     @IBOutlet weak var gameRatingLabel: UILabel!
     @IBOutlet weak var favoriteGame: UIImageView!
     
-    // private lazy var favoriteGameProvider: FavoriteGameProvider = { return FavoriteGameProvider() }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title="Detail"
         
-        self.gameImageView.image = game?.imageGame ?? nil
-        
-        self.gameNameLabel.text = game!.nameGame
-        
-        self.gameReleasedLabel.text = "Released in \(dateFormat.getDate(releasedGame: game!.releasedGame!))"
-        self.gameRatingLabel.text = "\(String(describing: Double(round(10 * game!.ratingGame) / 10)))/5"
+        self.gameImageView.image = imageGame ?? nil
         
         self.favoriteGame.image = favoriteGame.image?.withRenderingMode(.alwaysTemplate)
         
@@ -43,14 +37,7 @@ class DetailGameViewController: UIViewController {
         checkFavorite()
         
         
-        
-        if self.game!.imageGame == nil {
-            if let imageData = try? Data(contentsOf: self.game!.urlImageGame!){
-                DispatchQueue.main.async {
-                    self.gameImageView.image = UIImage(data: imageData)
-                }
-            }
-        }
+
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped))
         favoriteGame.addGestureRecognizer(tapGestureRecognizer)
@@ -59,11 +46,25 @@ class DetailGameViewController: UIViewController {
     }
     
     func getDescription() {
-        viewModel.getDetailGame(idGame: game!.idGame)
+        viewModel.getDetailGame(idGame: idGame)
             .observe(on: MainScheduler.instance)
             .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
             .subscribe(onNext: {result in
 
+                self.detailGame = result
+                
+                self.gameNameLabel.text = self.detailGame!.nameGame
+                
+                self.gameReleasedLabel.text = "Released in \(self.dateFormat.getDate(releasedGame: self.detailGame!.releasedGame!))"
+                self.gameRatingLabel.text = "\(String(describing: Double(round(10 * self.detailGame!.ratingGame) / 10)))/5"
+                if self.imageGame == nil {
+                    if let imageData = try? Data(contentsOf: self.detailGame!.urlImageGame!){
+                        DispatchQueue.main.async {
+                            self.gameImageView.image = UIImage(data: imageData)
+                        }
+                    }
+                }
+                
                 self.gameDetailLabel.text = result.descriptionGame?.htmlToString ?? ""
 
             }
@@ -73,7 +74,7 @@ class DetailGameViewController: UIViewController {
     
     func checkFavorite() {
         
-        viewModel.checkFavoriteGame(game!.idGame)
+        viewModel.checkFavoriteGame(idGame)
             .observe(on: MainScheduler.instance)
             .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
             .subscribe(onNext: {result in
@@ -94,7 +95,6 @@ class DetailGameViewController: UIViewController {
 extension DetailGameViewController{
     
     @objc func imageTapped(sender: UITapGestureRecognizer) {
-        print("CLICKED")
         if sender.state == .ended {
             if isFavorite{
                 removeFavoriteGame()
@@ -107,17 +107,17 @@ extension DetailGameViewController{
     func addFavoriteGame(){
         
         viewModel.addFavoriteGame(
-            game!.idGame,
-            game!.nameGame!,
-            game!.releasedGame!,
-            game!.urlImageGame!,
-            game!.ratingGame
+            detailGame!.idGame,
+            detailGame!.nameGame!,
+            detailGame!.releasedGame!,
+            detailGame!.urlImageGame!,
+            detailGame!.ratingGame
         )
         .observe(on: MainScheduler.instance)
         .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
         .subscribe(onNext: {result in
             if (result) {
-                let alert = UIAlertController(title: "Successful", message: "\(self.game!.nameGame!) has added to favorite game.", preferredStyle: .alert)
+                let alert = UIAlertController(title: "Successful", message: "\(self.detailGame!.nameGame!) has added to favorite game.", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
                     self.isFavorite = true
                     self.favoriteGame.tintColor = UIColor.systemPink
@@ -135,13 +135,13 @@ extension DetailGameViewController{
     func removeFavoriteGame(){
         
         viewModel.removeFavoriteGame(
-            game!.idGame
+            idGame
         )
         .observe(on: MainScheduler.instance)
         .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
         .subscribe(onNext: {result in
             if (result) {
-                let alert = UIAlertController(title: "Successful", message: "\(self.game!.nameGame!) has removed from favorite game.", preferredStyle: .alert)
+                let alert = UIAlertController(title: "Successful", message: "\(self.detailGame!.nameGame!) has removed from favorite game.", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
                     self.isFavorite = false
                     self.favoriteGame.tintColor = UIColor.systemGray4
