@@ -39,6 +39,7 @@
 		BC9AEC6F293DB92C006F4127 /* ListGameResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9AEC6E293DB92C006F4127 /* ListGameResponse.swift */; };
 		BC9AEC71293E15D8006F4127 /* DetailGameEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9AEC70293E15D8006F4127 /* DetailGameEntity.swift */; };
 		BC9AEC73293E15E6006F4127 /* ListGameEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9AEC72293E15E6006F4127 /* ListGameEntity.swift */; };
+		BC9AEC7C293E5237006F4127 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = BC9AEC7B293E5237006F4127 /* Swinject */; };
 		BCAB75E92861B2E6003FE514 /* FavoriteGame.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BCAB75E72861B2E6003FE514 /* FavoriteGame.xcdatamodeld */; };
 		BCAB75EC2861FF60003FE514 /* ListFavoriteGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAB75EA2861FF60003FE514 /* ListFavoriteGameViewController.swift */; };
 		BCAB75ED2861FF60003FE514 /* ListFavoriteGameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCAB75EB2861FF60003FE514 /* ListFavoriteGameViewController.xib */; };
@@ -107,6 +108,7 @@
 				BCFF96DD2933CE5500093A6A /* RxSwift in Frameworks */,
 				BCFF96DB2933CE5500093A6A /* RxCocoa in Frameworks */,
 				BCFF96D82933CE2C00093A6A /* Alamofire in Frameworks */,
+				BC9AEC7C293E5237006F4127 /* Swinject in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,6 +312,7 @@
 				BCFF96D72933CE2C00093A6A /* Alamofire */,
 				BCFF96DA2933CE5500093A6A /* RxCocoa */,
 				BCFF96DC2933CE5500093A6A /* RxSwift */,
+				BC9AEC7B293E5237006F4127 /* Swinject */,
 			);
 			productName = Gamerank;
 			productReference = BC19767E28589AD8000ABE4C /* Gamerank.app */;
@@ -342,6 +345,7 @@
 			packageReferences = (
 				BCFF96D62933CE2C00093A6A /* XCRemoteSwiftPackageReference "Alamofire" */,
 				BCFF96D92933CE5500093A6A /* XCRemoteSwiftPackageReference "RxSwift" */,
+				BC9AEC7A293E5237006F4127 /* XCRemoteSwiftPackageReference "Swinject" */,
 			);
 			productRefGroup = BC19767F28589AD8000ABE4C /* Products */;
 			projectDirPath = "";
@@ -627,6 +631,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		BC9AEC7A293E5237006F4127 /* XCRemoteSwiftPackageReference "Swinject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Swinject/Swinject.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		BCFF96D62933CE2C00093A6A /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire";
@@ -646,6 +658,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		BC9AEC7B293E5237006F4127 /* Swinject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BC9AEC7A293E5237006F4127 /* XCRemoteSwiftPackageReference "Swinject" */;
+			productName = Swinject;
+		};
 		BCFF96D72933CE2C00093A6A /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = BCFF96D62933CE2C00093A6A /* XCRemoteSwiftPackageReference "Alamofire" */;

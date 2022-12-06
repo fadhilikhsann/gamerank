@@ -16,7 +16,8 @@ class DetailGameViewController: UIViewController {
     var isFavorite: Bool = false
     let dateFormat = DateFormat()
     let disposeBag = DisposeBag()
-    private var viewModel = DetailGameViewModel(gameUseCaseProtocol: GameInjection.init().provideGameUseCase())
+    
+    var viewModel: DetailGameViewModel?
     
     @IBOutlet weak var gameImageView: UIImageView!
     @IBOutlet weak var gameNameLabel: UILabel!
@@ -46,7 +47,7 @@ class DetailGameViewController: UIViewController {
     }
     
     func getDescription() {
-        viewModel.getDetailGame(idGame: idGame)
+        viewModel?.getDetailGame(idGame: idGame)
             .observe(on: MainScheduler.instance)
             .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
             .subscribe(onNext: {result in
@@ -74,15 +75,15 @@ class DetailGameViewController: UIViewController {
     
     func checkFavorite() {
         
-        viewModel.checkFavoriteGame(idGame)
+        viewModel?.checkFavoriteGame(idGame)
             .observe(on: MainScheduler.instance)
             .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
             .subscribe(onNext: {result in
                 if (result) {
                     self.isFavorite = true
-                    
+        
                     self.favoriteGame.tintColor = UIColor.systemPink
-                    
+
                 }
                 
             }
@@ -106,7 +107,7 @@ extension DetailGameViewController{
     
     func addFavoriteGame(){
         
-        viewModel.addFavoriteGame(
+        viewModel?.addFavoriteGame(
             detailGame!.idGame,
             detailGame!.nameGame!,
             detailGame!.releasedGame!,
@@ -134,7 +135,7 @@ extension DetailGameViewController{
     
     func removeFavoriteGame(){
         
-        viewModel.removeFavoriteGame(
+        viewModel?.removeFavoriteGame(
             idGame
         )
         .observe(on: MainScheduler.instance)

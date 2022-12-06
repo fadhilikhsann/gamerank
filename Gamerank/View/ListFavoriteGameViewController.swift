@@ -7,22 +7,21 @@
 
 import UIKit
 import RxSwift
+import Swinject
 
 class ListFavoriteGameViewController: UIViewController {
     
     var tempIndexPath: IndexPath = []
     var tempIdGame: Int = 0
-//    private var favoriteGame: [GameModel]? = nil
     private var favoriteGame: [ListGameUIModel]? = nil
     let disposeBag = DisposeBag()
     let dateFormat = DateFormat()
     private let _pendingOperations = PendingOperations()
     @IBOutlet weak var favoriteGameTableView: UITableView!
-    private var viewModel = ListFavoriteGameViewModel(gameUseCaseProtocol: GameInjection.init().provideGameUseCase())
-    
-//    private lazy var favoriteGameProvider: FavoriteGameProvider = { return FavoriteGameProvider() }()
+    var viewModel: ListFavoriteGameViewModel?
     
     override func viewWillAppear(_ animated: Bool) {
+        
         if tempIdGame != 0 {
             
             checkFavorite(idGame: tempIdGame)
@@ -42,7 +41,7 @@ class ListFavoriteGameViewController: UIViewController {
     }
     
     func loadListFavoriteGameData(){
-        viewModel.getAllFavoriteGame()
+        viewModel?.getAllFavoriteGame()
             .observe(on: MainScheduler.instance)
             .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
             .subscribe(onNext: {result in
@@ -90,8 +89,7 @@ extension ListFavoriteGameViewController: UITableViewDataSource {
     }
     
     func checkFavorite(idGame: Int) {
-        
-        viewModel.checkFavoriteGame(idGame)
+        viewModel?.checkFavoriteGame(idGame)
             .observe(on: MainScheduler.instance)
             .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
             .subscribe(onNext: {result in
@@ -110,15 +108,25 @@ extension ListFavoriteGameViewController: UITableViewDataSource {
 
 extension ListFavoriteGameViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let detail = DetailGameViewController(nibName: "DetailGameViewController", bundle: nil)
-
-        detail.idGame = favoriteGame![indexPath.row].idGame
-        detail.imageGame = favoriteGame![indexPath.row].imageGame
+        let detailGameViewController: DetailGameViewController = {
+            let container = Container()
+            container.register(GameUseCase.self) { _ in GameInjection.init().provideGameUseCase() as! GameUseCase }
+            container.register(DetailGameViewModel.self) { r in DetailGameViewModel(gameUseCaseProtocol: r.resolve(GameUseCase.self)!) }
+            container.register(DetailGameViewController.self) { r in
+                let detailGame = DetailGameViewController(nibName: "DetailGameViewController", bundle: nil)
+                detailGame.viewModel = r.resolve(DetailGameViewModel.self)
+                return detailGame
+            }
+            return container
+        }().resolve(DetailGameViewController.self)!
         
-        tempIndexPath = indexPath
         tempIdGame = favoriteGame![indexPath.row].idGame
-
-        self.navigationController?.pushViewController(detail, animated: true)
+        tempIndexPath = indexPath
+        detailGameViewController.idGame = favoriteGame![indexPath.row].idGame
+        detailGameViewController.imageGame = favoriteGame![indexPath.row].imageGame
+        detailGameViewController.modalPresentationStyle = .popover
+        
+        self.navigationController?.pushViewController(detailGameViewController, animated: true)
     }
 }
 

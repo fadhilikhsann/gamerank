@@ -8,43 +8,40 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Swinject
 
 class ListGameViewController: UIViewController {
     let dateFormat = DateFormat()
-    private var viewModel = ListGameViewModel(gameUseCaseProtocol: GameInjection.init().provideGameUseCase())
-    //    var games:[GameModel]? = nil
+    var viewModel: ListGameViewModel?
     private var disposeBag = DisposeBag()
     var games:[ListGameUIModel]? = nil
     private let _pendingOperations = PendingOperations()
+
     @IBOutlet weak var gameTableView: UITableView!
-    
-    
     
     override func viewWillAppear(_ animated: Bool) {
         toggleSuspendOperations(isSuspended: false)
     }
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.prefersLargeTitles = true
-        loadListGameData()
-        
+        self.gameTableView.register(UINib(nibName: "GameTableViewCell", bundle: nil), forCellReuseIdentifier: "GameCell")
         self.gameTableView.dataSource = self
         self.gameTableView.delegate = self
-        
-        gameTableView.register(UINib(nibName: "GameTableViewCell", bundle: nil), forCellReuseIdentifier: "GameCell")
+        loadListGameData()
     }
-    
-    
+        
     private func loadListGameData() {
-        viewModel.getListGame()
+        viewModel?.getListGame()
             .observe(on: MainScheduler.instance)
             .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
             .subscribe(onNext: {result in
                 if(result.count > 0) {
                     self.games = result
                     self.gameTableView.reloadData()
-                    print("masukkkk")
                 }
             }
             )
@@ -57,8 +54,22 @@ class ListGameViewController: UIViewController {
         self.navigationController?.pushViewController(profile, animated: true)
     }
     @IBAction func showFavoriteGame(_ sender: Any) {
-        let favoriteGame = ListFavoriteGameViewController(nibName: "ListFavoriteGameViewController", bundle: nil)
-        self.navigationController?.pushViewController(favoriteGame, animated: true)
+        
+        let listFavoriteGameViewController: ListFavoriteGameViewController = {
+            let container = Container()
+            container.register(GameUseCase.self) { _ in GameInjection.init().provideGameUseCase() as! GameUseCase }
+            container.register(ListFavoriteGameViewModel.self) { r in ListFavoriteGameViewModel(gameUseCaseProtocol: r.resolve(GameUseCase.self)!) }
+            container.register(ListFavoriteGameViewController.self) { r in
+                let favoriteGame = ListFavoriteGameViewController(nibName: "ListFavoriteGameViewController", bundle: nil)
+                favoriteGame.viewModel = r.resolve(ListFavoriteGameViewModel.self)
+                return favoriteGame
+            }
+            return container
+        }().resolve(ListFavoriteGameViewController.self)!
+        
+        listFavoriteGameViewController.modalPresentationStyle = .popover
+        
+        self.navigationController?.pushViewController(listFavoriteGameViewController, animated: true)
     }
     
 }
@@ -71,8 +82,10 @@ extension ListGameViewController: UINavigationBarDelegate{
 }
 
 extension ListGameViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return games?.count ?? 0
+        guard let games = games else {return 0}
+        return games.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -107,14 +120,24 @@ extension ListGameViewController: UITableViewDataSource {
 
 extension ListGameViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let detail = DetailGameViewController(nibName: "DetailGameViewController", bundle: nil)
         
-        detail.idGame = games![indexPath.row].idGame
-        detail.imageGame = games![indexPath.row].imageGame
+        let detailGameViewController: DetailGameViewController = {
+            let container = Container()
+            container.register(GameUseCase.self) { _ in GameInjection.init().provideGameUseCase() as! GameUseCase }
+            container.register(DetailGameViewModel.self) { r in DetailGameViewModel(gameUseCaseProtocol: r.resolve(GameUseCase.self)!) }
+            container.register(DetailGameViewController.self) { r in
+                let detailGame = DetailGameViewController(nibName: "DetailGameViewController", bundle: nil)
+                detailGame.viewModel = r.resolve(DetailGameViewModel.self)
+                return detailGame
+            }
+            return container
+        }().resolve(DetailGameViewController.self)!
         
-        detail.modalPresentationStyle = .popover
+        detailGameViewController.idGame = games![indexPath.row].idGame
+        detailGameViewController.imageGame = games![indexPath.row].imageGame
+        detailGameViewController.modalPresentationStyle = .popover
         
-        self.navigationController?.pushViewController(detail, animated: true)
+        self.navigationController?.pushViewController(detailGameViewController, animated: true)
         //        self.present(detail, animated: true)
     }
 }
