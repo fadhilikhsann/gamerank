@@ -7,6 +7,9 @@
 
 import UIKit
 import RxSwift
+import Swinject
+import FavoriteGame
+import DetailGame
 
 class DetailGameViewController: UIViewController {
     
@@ -17,7 +20,8 @@ class DetailGameViewController: UIViewController {
     let dateFormat = DateFormat()
     let disposeBag = DisposeBag()
     
-    var viewModel: DetailGameViewModel?
+    var detailGamePresenter: DetailGamePresenter?
+    var favoriteGamePresenter: FavoriteGamePresenter?
     
     @IBOutlet weak var gameImageView: UIImageView!
     @IBOutlet weak var gameNameLabel: UILabel!
@@ -37,17 +41,15 @@ class DetailGameViewController: UIViewController {
         getDescription()
         checkFavorite()
         
-        
-
-        
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped))
         favoriteGame.addGestureRecognizer(tapGestureRecognizer)
         favoriteGame.isUserInteractionEnabled = true
+        
         // Do any additional setup after loading the view.
     }
     
     func getDescription() {
-        viewModel?.getDetailGame(idGame: idGame)
+        detailGamePresenter?.getDetail(idGame: idGame)
             .observe(on: MainScheduler.instance)
             .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
             .subscribe(onNext: {result in
@@ -75,7 +77,7 @@ class DetailGameViewController: UIViewController {
     
     func checkFavorite() {
         
-        viewModel?.checkFavoriteGame(idGame)
+        favoriteGamePresenter?.checkByID(idGame)
             .observe(on: MainScheduler.instance)
             .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
             .subscribe(onNext: {result in
@@ -97,7 +99,7 @@ extension DetailGameViewController{
     
     @objc func imageTapped(sender: UITapGestureRecognizer) {
         if sender.state == .ended {
-            if isFavorite{
+            if isFavorite {
                 removeFavoriteGame()
             } else {
                 addFavoriteGame()
@@ -107,7 +109,9 @@ extension DetailGameViewController{
     
     func addFavoriteGame(){
         
-        viewModel?.addFavoriteGame(
+        print("Masuk loo")
+        
+        favoriteGamePresenter?.add(
             detailGame!.idGame,
             detailGame!.nameGame!,
             detailGame!.releasedGame!,
@@ -118,10 +122,12 @@ extension DetailGameViewController{
         .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
         .subscribe(onNext: {result in
             if (result) {
+                print("harusnya berubah")
                 let alert = UIAlertController(title: "Successful", message: "\(self.detailGame!.nameGame!) has added to favorite game.", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
                     self.isFavorite = true
                     self.favoriteGame.tintColor = UIColor.systemPink
+                    
                 })
                 self.present(alert, animated: true, completion: nil)
             } else {
@@ -135,7 +141,7 @@ extension DetailGameViewController{
     
     func removeFavoriteGame(){
         
-        viewModel?.removeFavoriteGame(
+        favoriteGamePresenter?.removeByID(
             idGame
         )
         .observe(on: MainScheduler.instance)

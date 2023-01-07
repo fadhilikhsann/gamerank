@@ -9,12 +9,17 @@ import UIKit
 import RxSwift
 import RxCocoa
 import Swinject
+import FavoriteGame
+import ImageDownloader
+import DetailGame
+import ListGame
 
 class ListGameViewController: UIViewController {
     let dateFormat = DateFormat()
-    var viewModel: ListGameViewModel?
+    var listGamePresenter: ListGamePresenter?
     private var disposeBag = DisposeBag()
-    var games:[ListGameUIModel]? = nil
+    var games: [ListGameUIModel] = []
+    var uiImageModel: [UIImageModel] = []
     private let _pendingOperations = PendingOperations()
 
     @IBOutlet weak var gameTableView: UITableView!
@@ -28,6 +33,7 @@ class ListGameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.prefersLargeTitles = true
+    
         self.gameTableView.register(UINib(nibName: "GameTableViewCell", bundle: nil), forCellReuseIdentifier: "GameCell")
         self.gameTableView.dataSource = self
         self.gameTableView.delegate = self
@@ -35,7 +41,7 @@ class ListGameViewController: UIViewController {
     }
         
     private func loadListGameData() {
-        viewModel?.getListGame()
+        listGamePresenter?.getList()
             .observe(on: MainScheduler.instance)
             .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
             .subscribe(onNext: {result in
@@ -57,11 +63,13 @@ class ListGameViewController: UIViewController {
         
         let listFavoriteGameViewController: ListFavoriteGameViewController = {
             let container = Container()
-            container.register(GameUseCase.self) { _ in GameInjection.init().provideGameUseCase() as! GameUseCase }
-            container.register(ListFavoriteGameViewModel.self) { r in ListFavoriteGameViewModel(gameUseCaseProtocol: r.resolve(GameUseCase.self)!) }
+            
+            container.register(FavoriteGameUseCase.self) { _ in FavoriteGameInjection.init().provideGameUseCase() }
+            container.register(FavoriteGamePresenter.self) { r in FavoriteGamePresenter(useCase: r.resolve(FavoriteGameUseCase.self)!) }
+            
             container.register(ListFavoriteGameViewController.self) { r in
                 let favoriteGame = ListFavoriteGameViewController(nibName: "ListFavoriteGameViewController", bundle: nil)
-                favoriteGame.viewModel = r.resolve(ListFavoriteGameViewModel.self)
+                favoriteGame.favoriteGamePresenter = r.resolve(FavoriteGamePresenter.self)
                 return favoriteGame
             }
             return container
@@ -84,32 +92,35 @@ extension ListGameViewController: UINavigationBarDelegate{
 extension ListGameViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let games = games else {return 0}
         return games.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+    
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath) as? GameTableViewCell else{
             return UITableViewCell()
         }
         
-        let game = games?[indexPath.row]
+        let game = games[indexPath.row]
         cell.layoutMargins = UIEdgeInsets.zero
-        cell.gameNameLabel.text = game?.nameGame
+        cell.gameNameLabel.text = game.nameGame
         let formatter = DateFormatter()
         formatter.dateFormat = "dd MMM yyyy"
         
-        cell.gameReleasedLabel.text = "Released in \(dateFormat.getDate(releasedGame: (game?.releasedGame)!))"
-        cell.gameRatingLabel.text = "\(String(describing: Double(round(10 * game!.ratingGame) / 10)))/5"
+        cell.gameReleasedLabel.text = "Released in \(dateFormat.getDate(releasedGame: (game.releasedGame)!))"
+        cell.gameRatingLabel.text = "\(String(describing: Double(round(10 * game.ratingGame) / 10)))/5"
         
-        cell.gameImageView.image = game?.imageGame
+        uiImageModel.append(UIImageModel(forUrlImage: game.urlImageGame!))
+        
+        cell.gameImageView.image = uiImageModel[indexPath.row].image
         
         cell.gameImageView.layer.cornerRadius = 10
         cell.gameImageView.clipsToBounds = true
         
-        if game!.state == .new {
-            startOperations(game: game!, indexPath: indexPath)
+        uiImageModel[indexPath.row].urlImage = game.urlImageGame
+        
+        if uiImageModel[indexPath.row].state == .new {
+            startOperations(model: uiImageModel[indexPath.row], indexPath: indexPath)
         }
         
         return cell
@@ -123,18 +134,25 @@ extension ListGameViewController: UITableViewDelegate {
         
         let detailGameViewController: DetailGameViewController = {
             let container = Container()
-            container.register(GameUseCase.self) { _ in GameInjection.init().provideGameUseCase() as! GameUseCase }
-            container.register(DetailGameViewModel.self) { r in DetailGameViewModel(gameUseCaseProtocol: r.resolve(GameUseCase.self)!) }
+            container.register(DetailGameUseCase.self) { _ in DetailGameInjection.init().provideGameUseCase() }
+            container.register(DetailGamePresenter.self) { r in DetailGamePresenter(useCase: r.resolve(DetailGameUseCase.self)!) }
+            
+            container.register(FavoriteGameUseCase.self) { _ in FavoriteGameInjection.init().provideGameUseCase() }
+            container.register(FavoriteGamePresenter.self) { r in FavoriteGamePresenter(useCase: r.resolve(FavoriteGameUseCase.self)!) }
+            
             container.register(DetailGameViewController.self) { r in
                 let detailGame = DetailGameViewController(nibName: "DetailGameViewController", bundle: nil)
-                detailGame.viewModel = r.resolve(DetailGameViewModel.self)
+                
+                detailGame.detailGamePresenter = r.resolve(DetailGamePresenter.self)
+                detailGame.favoriteGamePresenter = r.resolve(FavoriteGamePresenter.self)
+                
                 return detailGame
             }
             return container
         }().resolve(DetailGameViewController.self)!
         
-        detailGameViewController.idGame = games![indexPath.row].idGame
-        detailGameViewController.imageGame = games![indexPath.row].imageGame
+        detailGameViewController.idGame = games[indexPath.row].idGame
+        detailGameViewController.imageGame = uiImageModel[indexPath.row].image
         detailGameViewController.modalPresentationStyle = .popover
         
         self.navigationController?.pushViewController(detailGameViewController, animated: true)
@@ -154,15 +172,15 @@ extension ListGameViewController: UIScrollViewDelegate {
 
 extension ListGameViewController {
     
-    fileprivate func startOperations(game: ListGameUIModel, indexPath: IndexPath) {
-        if game.state == .new {
-            startDownload(game: game, indexPath: indexPath)
+    fileprivate func startOperations(model: UIImageModel, indexPath: IndexPath) {
+        if model.state == .new {
+            startDownload(model: model, indexPath: indexPath)
         }
     }
     
-    fileprivate func startDownload(game: ListGameUIModel, indexPath: IndexPath) {
+    fileprivate func startDownload(model: UIImageModel, indexPath: IndexPath) {
         guard _pendingOperations.downloadInProgress[indexPath] == nil else { return }
-        let downloader = ImageDownloader(game: game)
+        let downloader = ImageDownloader(model: model)
         downloader.completionBlock = {
             if downloader.isCancelled { return }
             

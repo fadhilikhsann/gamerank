@@ -7,18 +7,18 @@
 
 import UIKit
 import Swinject
-
+import ListGame
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let container: Container = {
             let container = Container()
-            container.register(GameUseCase.self) { _ in GameInjection.init().provideGameUseCase() as! GameUseCase }
-            container.register(ListGameViewModel.self) { r in ListGameViewModel(gameUseCaseProtocol: r.resolve(GameUseCase.self)!) }
+            container.register(ListGameUseCase.self) { _ in ListGameInjection.init().provideGameUseCase() }
+            container.register(ListGamePresenter.self) { r in ListGamePresenter(useCase: r.resolve(ListGameUseCase.self)!) }
             container.register(ListGameViewController.self) { r in
                 let storyBoard = UIStoryboard(name: "Main", bundle: nil)
                 if let controller = storyBoard.instantiateViewController(withIdentifier: "GameList") as? ListGameViewController{
-                    controller.viewModel = r.resolve(ListGameViewModel.self)
+                    controller.listGamePresenter = r.resolve(ListGamePresenter.self)
                     return controller
                 }
                 
