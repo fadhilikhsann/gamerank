@@ -20,6 +20,34 @@
                ReferencedContainer = "container:Gamerank.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BCA727A8296B3F3500BD5C56"
+               BuildableName = "GamerankTests.xctest"
+               BlueprintName = "GamerankTests"
+               ReferencedContainer = "container:Gamerank.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BCA727B5296B3F5600BD5C56"
+               BuildableName = "GamerankUITests.xctest"
+               BlueprintName = "GamerankUITests"
+               ReferencedContainer = "container:Gamerank.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -29,7 +57,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:GamerankTestPlan.xctestplan"
+            reference = "container:GamerankTests/GamerankTestPlan.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
