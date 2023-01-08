@@ -7,18 +7,19 @@
 
 import Foundation
 import ListGame
+import CoreModule
+import UIKit
 
 final class ListGameInjection {
     
-    private func provideDataSource() -> ListGameDataSourceProtocol {
-        return ListGameDataSource()
+    func provideUseCase<T: UseCaseDelegate>() -> T where T.Request == Any, T.Response == [ListGameModel] {
+        
+        let dataSource = ListGameDataSource()
+        
+        let repository = ListGameRepository(dataSource: dataSource)
+        
+        return ListGameInteractor(repository: repository) as! T
+        
     }
     
-    private func provideGameRepository() -> ListGameRepositoryProtocol {
-        return ListGameRepository(dataSource: provideDataSource())
-    }
-    
-    func provideGameUseCase() -> ListGameUseCase {
-        return ListGameInteractor(repository: provideGameRepository())
-    }
 }

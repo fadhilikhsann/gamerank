@@ -11,6 +11,7 @@ import Swinject
 import FavoriteGame
 import ImageDownloader
 import DetailGame
+import CoreModule
 
 class ListFavoriteGameViewController: UIViewController {
     
@@ -22,7 +23,13 @@ class ListFavoriteGameViewController: UIViewController {
     let dateFormat = DateFormat()
     private let _pendingOperations = PendingOperations()
     @IBOutlet weak var favoriteGameTableView: UITableView!
-    var favoriteGamePresenter: FavoriteGamePresenter?
+    var favoriteGamePresenter: FavoriteGamePresenter<
+        FavoriteGameInteractor<
+            FavoriteGameRepository<
+                FavoriteGameDataSource
+            >
+        >
+    >?
     
     override func viewWillAppear(_ animated: Bool) {
         
@@ -45,7 +52,7 @@ class ListFavoriteGameViewController: UIViewController {
     }
     
     func loadListFavoriteGameData(){
-        favoriteGamePresenter?.getAll()
+        favoriteGamePresenter?.getData(request: nil)
             .observe(on: MainScheduler.instance)
             .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
             .subscribe(onNext: {result in
@@ -117,11 +124,48 @@ extension ListFavoriteGameViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailGameViewController: DetailGameViewController = {
             let container = Container()
-            container.register(DetailGameUseCase.self) { _ in DetailGameInjection.init().provideGameUseCase() }
-            container.register(DetailGamePresenter.self) { r in DetailGamePresenter(useCase: r.resolve(DetailGameUseCase.self)!) }
             
-            container.register(FavoriteGameUseCase.self) { _ in FavoriteGameInjection.init().provideGameUseCase() }
-            container.register(FavoriteGamePresenter.self) { r in FavoriteGamePresenter(useCase: r.resolve(FavoriteGameUseCase.self)!) }
+            container.register(
+                DetailGameInteractor<
+                DetailGameRepository<
+                DetailGameDataSource
+                >>.self
+            ) { _ in DetailGameInjection.init().provideUseCase() }
+            container.register(DetailGamePresenter.self) { r in DetailGamePresenter(useCase: r.resolve(
+                DetailGameInteractor<
+                DetailGameRepository<
+                DetailGameDataSource
+                >>.self
+            )!) }
+            
+            container.register(
+                FavoriteGameUseCase.self
+            ) {
+                _ in FavoriteGameInjection.init().provideLocaleUseCase()
+            }
+            container.register(
+                FavoriteGameInteractor<
+                FavoriteGameRepository<
+                FavoriteGameDataSource
+                >>.self
+            ) {
+                _ in FavoriteGameInjection.init().provideRemoteUseCase()
+            }
+            container.register(
+                FavoriteGamePresenter.self
+            ) {
+                r in FavoriteGamePresenter(
+                remoteUseCase: r.resolve(
+                    FavoriteGameInteractor<
+                    FavoriteGameRepository<
+                    FavoriteGameDataSource
+                    >>.self
+                )!,
+                localeUseCase: r.resolve(
+                    FavoriteGameUseCase.self
+                )!
+            )
+            }
             
             container.register(DetailGameViewController.self) { r in
                 let detailGame = DetailGameViewController(nibName: "DetailGameViewController", bundle: nil)

@@ -10,6 +10,7 @@ import RxSwift
 import Swinject
 import FavoriteGame
 import DetailGame
+import CoreModule
 
 class DetailGameViewController: UIViewController {
     
@@ -20,8 +21,21 @@ class DetailGameViewController: UIViewController {
     let dateFormat = DateFormat()
     let disposeBag = DisposeBag()
     
-    var detailGamePresenter: DetailGamePresenter?
-    var favoriteGamePresenter: FavoriteGamePresenter?
+    var detailGamePresenter: DetailGamePresenter<
+        DetailGameInteractor<
+            DetailGameRepository<
+                DetailGameDataSource
+            >
+        >
+    >?
+    
+    var favoriteGamePresenter: FavoriteGamePresenter<
+        FavoriteGameInteractor<
+            FavoriteGameRepository<
+                FavoriteGameDataSource
+            >
+        >
+    >?
     
     @IBOutlet weak var gameImageView: UIImageView!
     @IBOutlet weak var gameNameLabel: UILabel!
@@ -49,7 +63,7 @@ class DetailGameViewController: UIViewController {
     }
     
     func getDescription() {
-        detailGamePresenter?.getDetail(idGame: idGame)
+        detailGamePresenter?.getData(request: idGame)
             .observe(on: MainScheduler.instance)
             .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .background))
             .subscribe(onNext: {result in

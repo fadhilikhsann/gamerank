@@ -7,18 +7,59 @@
 
 import Foundation
 import FavoriteGame
+import CoreModule
 
 final class FavoriteGameInjection {
     
-    private func provideDataSource() -> FavoriteGameDataSourceProtocol {
+    func provideDataSource<T: DataSourceDelegate>() -> T {
+        return FavoriteGameDataSource() as! T
+    }
+    func provideLocaleDataSource() -> FavoriteGameDataSourceProtocol {
         return FavoriteGameDataSource()
     }
     
-    private func provideGameRepository() -> FavoriteGameRepositoryProtocol {
-        return FavoriteGameRepository(dataSource: provideDataSource())
+    func provideRemoteRepository<T: RepositoryDelegate>() -> T {
+        let repository: FavoriteGameRepository<
+                FavoriteGameDataSource
+            > = FavoriteGameRepository(
+            remoteDataSource: provideDataSource()
+        )
+        return repository as! T
+    }
+    func provideLocaleRepository() -> FavoriteGameRepositoryProtocol {
+        let repository: FavoriteGameRepository<
+                FavoriteGameDataSource
+            > = FavoriteGameRepository(
+            localeDataSource: provideLocaleDataSource()
+        )
+        return repository
     }
     
-    func provideGameUseCase() -> FavoriteGameUseCase {
-        return FavoriteGameInteractor(repository: provideGameRepository())
+    func provideLocaleUseCase() -> FavoriteGameUseCase {
+        
+        let interactor: FavoriteGameInteractor<
+            FavoriteGameRepository<
+                FavoriteGameDataSource
+            >
+        > = FavoriteGameInteractor(
+            localeRepository: provideLocaleRepository()
+        )
+        
+        return interactor
+        
+    }
+    
+    func provideRemoteUseCase<T: UseCaseDelegate>() -> T where T.Request == Any, T.Response == [FavoriteGameModel] {
+        
+        let interactor: FavoriteGameInteractor<
+            FavoriteGameRepository<
+                FavoriteGameDataSource
+            >
+        > = FavoriteGameInteractor(
+            remoteRepository: provideRemoteRepository()
+        )
+        
+        return interactor as! T
+        
     }
 }
