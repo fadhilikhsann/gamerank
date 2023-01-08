@@ -74,6 +74,28 @@
                ReferencedContainer = "container:Modules/ListGame">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BCA727A8296B3F3500BD5C56"
+               BuildableName = "GamerankTests.xctest"
+               BlueprintName = "GamerankTests"
+               ReferencedContainer = "container:Gamerank.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BCA727B5296B3F5600BD5C56"
+               BuildableName = "GamerankUITests.xctest"
+               BlueprintName = "GamerankUITests"
+               ReferencedContainer = "container:Gamerank.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
