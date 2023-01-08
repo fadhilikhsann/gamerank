@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/fadhilikhsann/Gamerank-CoreModule.git",
       "state" : {
-        "revision" : "02296e3a77650cffe15db2cda20ece58667c7ba5",
-        "version" : "1.0.1"
+        "revision" : "cc07b690f50423ec592e0c2b4a219ede07aa774d",
+        "version" : "1.0.2"
       }
     },
     {
