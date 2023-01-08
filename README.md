@@ -1,3 +1,3 @@
-# gamerank
+# Gamerank
 
 Gamerank iOS App
