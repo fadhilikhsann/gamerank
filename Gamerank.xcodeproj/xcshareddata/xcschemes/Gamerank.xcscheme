@@ -29,7 +29,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:Gamerank.xcodeproj/Gamerank.xctestplan"
+            reference = "container:GamerankTestPlan.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
