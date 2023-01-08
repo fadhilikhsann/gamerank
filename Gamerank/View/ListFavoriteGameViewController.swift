@@ -151,16 +151,15 @@ extension ListFavoriteGameViewController: UITableViewDelegate {
             ) {
                 _ in FavoriteGameInjection.init().provideRemoteUseCase()
             }
+            
             container.register(
-                FavoriteGamePresenter.self
+                FavoriteGamePresenter<
+                FavoriteGameInteractor<
+                FavoriteGameRepository<
+                FavoriteGameDataSource
+                >>>.self
             ) {
                 r in FavoriteGamePresenter(
-                remoteUseCase: r.resolve(
-                    FavoriteGameInteractor<
-                    FavoriteGameRepository<
-                    FavoriteGameDataSource
-                    >>.self
-                )!,
                 localeUseCase: r.resolve(
                     FavoriteGameUseCase.self
                 )!
@@ -170,7 +169,13 @@ extension ListFavoriteGameViewController: UITableViewDelegate {
             container.register(DetailGameViewController.self) { r in
                 let detailGame = DetailGameViewController(nibName: "DetailGameViewController", bundle: nil)
                 detailGame.detailGamePresenter = r.resolve(DetailGamePresenter.self)
-                detailGame.favoriteGamePresenter = r.resolve(FavoriteGamePresenter.self)
+                detailGame.favoriteGamePresenter = r.resolve(
+                    FavoriteGamePresenter<
+                    FavoriteGameInteractor<
+                    FavoriteGameRepository<
+                    FavoriteGameDataSource
+                    >>>.self
+                )
                 return detailGame
             }
             return container

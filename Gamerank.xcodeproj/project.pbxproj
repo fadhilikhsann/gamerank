@@ -21,14 +21,14 @@
 		BC1976D7285CA1CD000ABE4C /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1976D5285CA1CD000ABE4C /* ProfileViewController.swift */; };
 		BC1976D8285CA1CD000ABE4C /* ProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC1976D6285CA1CD000ABE4C /* ProfileViewController.xib */; };
 		BC9AEC7C293E5237006F4127 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = BC9AEC7B293E5237006F4127 /* Swinject */; };
-		BCA727642968771900BD5C56 /* FavoriteGame in Frameworks */ = {isa = PBXBuildFile; productRef = BCA727632968771900BD5C56 /* FavoriteGame */; };
 		BCA7276729694E6500BD5C56 /* FavoriteGameInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA7276629694E6500BD5C56 /* FavoriteGameInjection.swift */; };
-		BCA727742969E53900BD5C56 /* ImageDownloader in Frameworks */ = {isa = PBXBuildFile; productRef = BCA727732969E53900BD5C56 /* ImageDownloader */; };
-		BCA727762969F9E600BD5C56 /* DetailGame in Frameworks */ = {isa = PBXBuildFile; productRef = BCA727752969F9E600BD5C56 /* DetailGame */; };
-		BCA727782969F9EC00BD5C56 /* ListGame in Frameworks */ = {isa = PBXBuildFile; productRef = BCA727772969F9EC00BD5C56 /* ListGame */; };
 		BCA7277A2969FB6400BD5C56 /* DetailGameInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA727792969FB6400BD5C56 /* DetailGameInjection.swift */; };
 		BCA7277C296A049E00BD5C56 /* ListGameInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA7277B296A049E00BD5C56 /* ListGameInjection.swift */; };
 		BCA7277F296A14EB00BD5C56 /* CoreModule in Frameworks */ = {isa = PBXBuildFile; productRef = BCA7277E296A14EB00BD5C56 /* CoreModule */; };
+		BCA7278C296B24F300BD5C56 /* DetailGame in Frameworks */ = {isa = PBXBuildFile; productRef = BCA7278B296B24F300BD5C56 /* DetailGame */; };
+		BCA7278E296B24F700BD5C56 /* FavoriteGame in Frameworks */ = {isa = PBXBuildFile; productRef = BCA7278D296B24F700BD5C56 /* FavoriteGame */; };
+		BCA72790296B24FB00BD5C56 /* ListGame in Frameworks */ = {isa = PBXBuildFile; productRef = BCA7278F296B24FB00BD5C56 /* ListGame */; };
+		BCA72792296B24FE00BD5C56 /* ImageDownloader in Frameworks */ = {isa = PBXBuildFile; productRef = BCA72791296B24FE00BD5C56 /* ImageDownloader */; };
 		BCAB75EC2861FF60003FE514 /* ListFavoriteGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAB75EA2861FF60003FE514 /* ListFavoriteGameViewController.swift */; };
 		BCAB75ED2861FF60003FE514 /* ListFavoriteGameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCAB75EB2861FF60003FE514 /* ListFavoriteGameViewController.xib */; };
 		BCFF96DB2933CE5500093A6A /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = BCFF96DA2933CE5500093A6A /* RxCocoa */; };
@@ -51,14 +51,13 @@
 		BC1976D3285C9B6E000ABE4C /* Formatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatter.swift; sourceTree = "<group>"; };
 		BC1976D5285CA1CD000ABE4C /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		BC1976D6285CA1CD000ABE4C /* ProfileViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProfileViewController.xib; sourceTree = "<group>"; };
-		BC5B3E772965E5260025228C /* FavoriteGame */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = FavoriteGame; path = Modules/FavoriteGame; sourceTree = "<group>"; };
-		BC5B3E782965E5320025228C /* DetailGame */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DetailGame; path = Modules/DetailGame; sourceTree = "<group>"; };
-		BC5B3E792965E53D0025228C /* ListGame */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ListGame; path = Modules/ListGame; sourceTree = "<group>"; };
 		BCA7276629694E6500BD5C56 /* FavoriteGameInjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteGameInjection.swift; sourceTree = "<group>"; };
-		BCA727722969E42C00BD5C56 /* ImageDownloader */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ImageDownloader; path = Modules/ImageDownloader; sourceTree = "<group>"; };
 		BCA727792969FB6400BD5C56 /* DetailGameInjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailGameInjection.swift; sourceTree = "<group>"; };
 		BCA7277B296A049E00BD5C56 /* ListGameInjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListGameInjection.swift; sourceTree = "<group>"; };
-		BCA7277D296A072F00BD5C56 /* CoreModule */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CoreModule; path = Modules/CoreModule; sourceTree = "<group>"; };
+		BCA72793296B263700BD5C56 /* ImageDownloader */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ImageDownloader; path = Modules/ImageDownloader; sourceTree = "<group>"; };
+		BCA72794296B264400BD5C56 /* FavoriteGame */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = FavoriteGame; path = Modules/FavoriteGame; sourceTree = "<group>"; };
+		BCA72795296B264E00BD5C56 /* DetailGame */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DetailGame; path = Modules/DetailGame; sourceTree = "<group>"; };
+		BCA72796296B266800BD5C56 /* ListGame */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ListGame; path = Modules/ListGame; sourceTree = "<group>"; };
 		BCAB75EA2861FF60003FE514 /* ListFavoriteGameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListFavoriteGameViewController.swift; sourceTree = "<group>"; };
 		BCAB75EB2861FF60003FE514 /* ListFavoriteGameViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ListFavoriteGameViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -68,14 +67,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BCA727742969E53900BD5C56 /* ImageDownloader in Frameworks */,
 				BCA7277F296A14EB00BD5C56 /* CoreModule in Frameworks */,
+				BCA72792296B24FE00BD5C56 /* ImageDownloader in Frameworks */,
+				BCA7278C296B24F300BD5C56 /* DetailGame in Frameworks */,
+				BCA7278E296B24F700BD5C56 /* FavoriteGame in Frameworks */,
 				BCFF96DD2933CE5500093A6A /* RxSwift in Frameworks */,
-				BCA727642968771900BD5C56 /* FavoriteGame in Frameworks */,
 				BCFF96DB2933CE5500093A6A /* RxCocoa in Frameworks */,
 				BC9AEC7C293E5237006F4127 /* Swinject in Frameworks */,
-				BCA727762969F9E600BD5C56 /* DetailGame in Frameworks */,
-				BCA727782969F9EC00BD5C56 /* ListGame in Frameworks */,
+				BCA72790296B24FB00BD5C56 /* ListGame in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -169,11 +168,10 @@
 		BC5B3E742965E50E0025228C /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				BC5B3E772965E5260025228C /* FavoriteGame */,
-				BC5B3E782965E5320025228C /* DetailGame */,
-				BC5B3E792965E53D0025228C /* ListGame */,
-				BCA727722969E42C00BD5C56 /* ImageDownloader */,
-				BCA7277D296A072F00BD5C56 /* CoreModule */,
+				BCA72793296B263700BD5C56 /* ImageDownloader */,
+				BCA72794296B264400BD5C56 /* FavoriteGame */,
+				BCA72795296B264E00BD5C56 /* DetailGame */,
+				BCA72796296B266800BD5C56 /* ListGame */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -213,11 +211,11 @@
 				BCFF96DA2933CE5500093A6A /* RxCocoa */,
 				BCFF96DC2933CE5500093A6A /* RxSwift */,
 				BC9AEC7B293E5237006F4127 /* Swinject */,
-				BCA727632968771900BD5C56 /* FavoriteGame */,
-				BCA727732969E53900BD5C56 /* ImageDownloader */,
-				BCA727752969F9E600BD5C56 /* DetailGame */,
-				BCA727772969F9EC00BD5C56 /* ListGame */,
 				BCA7277E296A14EB00BD5C56 /* CoreModule */,
+				BCA7278B296B24F300BD5C56 /* DetailGame */,
+				BCA7278D296B24F700BD5C56 /* FavoriteGame */,
+				BCA7278F296B24FB00BD5C56 /* ListGame */,
+				BCA72791296B24FE00BD5C56 /* ImageDownloader */,
 			);
 			productName = Gamerank;
 			productReference = BC19767E28589AD8000ABE4C /* Gamerank.app */;
@@ -250,6 +248,7 @@
 			packageReferences = (
 				BCFF96D92933CE5500093A6A /* XCRemoteSwiftPackageReference "RxSwift" */,
 				BC9AEC7A293E5237006F4127 /* XCRemoteSwiftPackageReference "Swinject" */,
+				BCA72780296B1E7D00BD5C56 /* XCRemoteSwiftPackageReference "Gamerank-CoreModule" */,
 			);
 			productRefGroup = BC19767F28589AD8000ABE4C /* Products */;
 			projectDirPath = "";
@@ -520,6 +519,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		BCA72780296B1E7D00BD5C56 /* XCRemoteSwiftPackageReference "Gamerank-CoreModule" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/fadhilikhsann/Gamerank-CoreModule.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		BCFF96D92933CE5500093A6A /* XCRemoteSwiftPackageReference "RxSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactiveX/RxSwift";
@@ -536,25 +543,25 @@
 			package = BC9AEC7A293E5237006F4127 /* XCRemoteSwiftPackageReference "Swinject" */;
 			productName = Swinject;
 		};
-		BCA727632968771900BD5C56 /* FavoriteGame */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = FavoriteGame;
-		};
-		BCA727732969E53900BD5C56 /* ImageDownloader */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = ImageDownloader;
-		};
-		BCA727752969F9E600BD5C56 /* DetailGame */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = DetailGame;
-		};
-		BCA727772969F9EC00BD5C56 /* ListGame */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = ListGame;
-		};
 		BCA7277E296A14EB00BD5C56 /* CoreModule */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CoreModule;
+		};
+		BCA7278B296B24F300BD5C56 /* DetailGame */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DetailGame;
+		};
+		BCA7278D296B24F700BD5C56 /* FavoriteGame */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FavoriteGame;
+		};
+		BCA7278F296B24FB00BD5C56 /* ListGame */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ListGame;
+		};
+		BCA72791296B24FE00BD5C56 /* ImageDownloader */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ImageDownloader;
 		};
 		BCFF96DA2933CE5500093A6A /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;
