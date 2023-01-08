@@ -1,5 +1,5 @@
 language: swift
-osx_image: xcode12
+osx_image: xcode14.2
 xcode_project: Gamerank.xcodeproj
 xcode_scheme: Gamerank
-xcode_destination: platform=iOS Simulator,OS=14.0,name=iPhone 11 Pro
+xcode_destination: platform=iOS Simulator,OS=16.2,name=iPhone 14 Pro
