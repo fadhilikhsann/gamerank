@@ -99,7 +99,7 @@
 		BCA727B8296B3F5600BD5C56 /* GamerankUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamerankUITests.swift; sourceTree = "<group>"; };
 		BCA727BA296B3F5600BD5C56 /* GamerankUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamerankUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		BCA727D7296B536A00BD5C56 /* SampleTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleTest.swift; sourceTree = "<group>"; };
-		BCA72807296B689E00BD5C56 /* GamerankTestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = GamerankTestPlan.xctestplan; path = GamerankTests/GamerankTestPlan.xctestplan; sourceTree = "<group>"; };
+		BCA72808296B69DF00BD5C56 /* GamerankTestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = GamerankTestPlan.xctestplan; path = GamerankTests/GamerankTestPlan.xctestplan; sourceTree = "<group>"; };
 		BCAB75EA2861FF60003FE514 /* ListFavoriteGameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListFavoriteGameViewController.swift; sourceTree = "<group>"; };
 		BCAB75EB2861FF60003FE514 /* ListFavoriteGameViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ListFavoriteGameViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -166,7 +166,7 @@
 		BC19767528589AD8000ABE4C = {
 			isa = PBXGroup;
 			children = (
-				BCA72807296B689E00BD5C56 /* GamerankTestPlan.xctestplan */,
+				BCA72808296B69DF00BD5C56 /* GamerankTestPlan.xctestplan */,
 				BC5B3E742965E50E0025228C /* Packages */,
 				BC19768028589AD8000ABE4C /* Gamerank */,
 				BCA727AA296B3F3500BD5C56 /* GamerankTests */,
