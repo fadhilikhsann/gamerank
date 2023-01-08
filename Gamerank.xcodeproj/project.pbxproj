@@ -24,7 +24,6 @@
 		BCA7276729694E6500BD5C56 /* FavoriteGameInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA7276629694E6500BD5C56 /* FavoriteGameInjection.swift */; };
 		BCA7277A2969FB6400BD5C56 /* DetailGameInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA727792969FB6400BD5C56 /* DetailGameInjection.swift */; };
 		BCA7277C296A049E00BD5C56 /* ListGameInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA7277B296A049E00BD5C56 /* ListGameInjection.swift */; };
-		BCA7277F296A14EB00BD5C56 /* CoreModule in Frameworks */ = {isa = PBXBuildFile; productRef = BCA7277E296A14EB00BD5C56 /* CoreModule */; };
 		BCA7278C296B24F300BD5C56 /* DetailGame in Frameworks */ = {isa = PBXBuildFile; productRef = BCA7278B296B24F300BD5C56 /* DetailGame */; };
 		BCA7278E296B24F700BD5C56 /* FavoriteGame in Frameworks */ = {isa = PBXBuildFile; productRef = BCA7278D296B24F700BD5C56 /* FavoriteGame */; };
 		BCA72790296B24FB00BD5C56 /* ListGame in Frameworks */ = {isa = PBXBuildFile; productRef = BCA7278F296B24FB00BD5C56 /* ListGame */; };
@@ -32,10 +31,11 @@
 		BCA727AC296B3F3500BD5C56 /* GamerankTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA727AB296B3F3500BD5C56 /* GamerankTests.swift */; };
 		BCA727B9296B3F5600BD5C56 /* GamerankUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA727B8296B3F5600BD5C56 /* GamerankUITests.swift */; };
 		BCA727BB296B3F5600BD5C56 /* GamerankUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA727BA296B3F5600BD5C56 /* GamerankUITestsLaunchTests.swift */; };
+		BCA727C3296B416900BD5C56 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = BCA727C2296B416900BD5C56 /* RxCocoa */; };
+		BCA727C5296B416900BD5C56 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BCA727C4296B416900BD5C56 /* RxSwift */; };
+		BCA727C7296B43E300BD5C56 /* CoreModule in Frameworks */ = {isa = PBXBuildFile; productRef = BCA727C6296B43E300BD5C56 /* CoreModule */; };
 		BCAB75EC2861FF60003FE514 /* ListFavoriteGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAB75EA2861FF60003FE514 /* ListFavoriteGameViewController.swift */; };
 		BCAB75ED2861FF60003FE514 /* ListFavoriteGameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCAB75EB2861FF60003FE514 /* ListFavoriteGameViewController.xib */; };
-		BCFF96DB2933CE5500093A6A /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = BCFF96DA2933CE5500093A6A /* RxCocoa */; };
-		BCFF96DD2933CE5500093A6A /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BCFF96DC2933CE5500093A6A /* RxSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,13 +93,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BCA7277F296A14EB00BD5C56 /* CoreModule in Frameworks */,
 				BCA72792296B24FE00BD5C56 /* ImageDownloader in Frameworks */,
+				BCA727C7296B43E300BD5C56 /* CoreModule in Frameworks */,
 				BCA7278C296B24F300BD5C56 /* DetailGame in Frameworks */,
+				BCA727C3296B416900BD5C56 /* RxCocoa in Frameworks */,
 				BCA7278E296B24F700BD5C56 /* FavoriteGame in Frameworks */,
-				BCFF96DD2933CE5500093A6A /* RxSwift in Frameworks */,
-				BCFF96DB2933CE5500093A6A /* RxCocoa in Frameworks */,
 				BC9AEC7C293E5237006F4127 /* Swinject in Frameworks */,
+				BCA727C5296B416900BD5C56 /* RxSwift in Frameworks */,
 				BCA72790296B24FB00BD5C56 /* ListGame in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -270,14 +270,14 @@
 			);
 			name = Gamerank;
 			packageProductDependencies = (
-				BCFF96DA2933CE5500093A6A /* RxCocoa */,
-				BCFF96DC2933CE5500093A6A /* RxSwift */,
 				BC9AEC7B293E5237006F4127 /* Swinject */,
-				BCA7277E296A14EB00BD5C56 /* CoreModule */,
 				BCA7278B296B24F300BD5C56 /* DetailGame */,
 				BCA7278D296B24F700BD5C56 /* FavoriteGame */,
 				BCA7278F296B24FB00BD5C56 /* ListGame */,
 				BCA72791296B24FE00BD5C56 /* ImageDownloader */,
+				BCA727C2296B416900BD5C56 /* RxCocoa */,
+				BCA727C4296B416900BD5C56 /* RxSwift */,
+				BCA727C6296B43E300BD5C56 /* CoreModule */,
 			);
 			productName = Gamerank;
 			productReference = BC19767E28589AD8000ABE4C /* Gamerank.app */;
@@ -352,9 +352,9 @@
 			);
 			mainGroup = BC19767528589AD8000ABE4C;
 			packageReferences = (
-				BCFF96D92933CE5500093A6A /* XCRemoteSwiftPackageReference "RxSwift" */,
 				BC9AEC7A293E5237006F4127 /* XCRemoteSwiftPackageReference "Swinject" */,
 				BCA72780296B1E7D00BD5C56 /* XCRemoteSwiftPackageReference "Gamerank-CoreModule" */,
+				BCA727C1296B416900BD5C56 /* XCRemoteSwiftPackageReference "RxSwift" */,
 			);
 			productRefGroup = BC19767F28589AD8000ABE4C /* Products */;
 			projectDirPath = "";
@@ -772,10 +772,10 @@
 			repositoryURL = "https://github.com/fadhilikhsann/Gamerank-CoreModule.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				minimumVersion = 1.0.1;
 			};
 		};
-		BCFF96D92933CE5500093A6A /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+		BCA727C1296B416900BD5C56 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactiveX/RxSwift";
 			requirement = {
@@ -790,10 +790,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BC9AEC7A293E5237006F4127 /* XCRemoteSwiftPackageReference "Swinject" */;
 			productName = Swinject;
-		};
-		BCA7277E296A14EB00BD5C56 /* CoreModule */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = CoreModule;
 		};
 		BCA7278B296B24F300BD5C56 /* DetailGame */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -811,15 +807,20 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = ImageDownloader;
 		};
-		BCFF96DA2933CE5500093A6A /* RxCocoa */ = {
+		BCA727C2296B416900BD5C56 /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = BCFF96D92933CE5500093A6A /* XCRemoteSwiftPackageReference "RxSwift" */;
+			package = BCA727C1296B416900BD5C56 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxCocoa;
 		};
-		BCFF96DC2933CE5500093A6A /* RxSwift */ = {
+		BCA727C4296B416900BD5C56 /* RxSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = BCFF96D92933CE5500093A6A /* XCRemoteSwiftPackageReference "RxSwift" */;
+			package = BCA727C1296B416900BD5C56 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxSwift;
+		};
+		BCA727C6296B43E300BD5C56 /* CoreModule */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BCA72780296B1E7D00BD5C56 /* XCRemoteSwiftPackageReference "Gamerank-CoreModule" */;
+			productName = CoreModule;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
