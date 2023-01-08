@@ -1,0 +1,50 @@
+{
+  "configurations" : [
+    {
+      "id" : "91E415D2-037E-4626-AE84-99E50F88CFE3",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Gamerank.xcodeproj",
+      "identifier" : "BC19767D28589AD8000ABE4C",
+      "name" : "Gamerank"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Modules\/DetailGame",
+        "identifier" : "DetailGameTests",
+        "name" : "DetailGameTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Modules\/FavoriteGame",
+        "identifier" : "FavoriteGameTests",
+        "name" : "FavoriteGameTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Modules\/ImageDownloader",
+        "identifier" : "ImageDownloaderTests",
+        "name" : "ImageDownloaderTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Modules\/ListGame",
+        "identifier" : "ListGameTests",
+        "name" : "ListGameTests"
+      }
+    }
+  ],
+  "version" : 1
+}
