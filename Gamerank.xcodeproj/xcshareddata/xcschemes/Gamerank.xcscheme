@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "1420"
-   version = "1.7">
+   version = "2.1">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
@@ -47,6 +47,16 @@
                BlueprintName = "GamerankUITests"
                ReferencedContainer = "container:Gamerank.xcodeproj">
             </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <TestPlanReference
+               reference = "container:GamerankTests/GamerankTestPlan.xctestplan">
+            </TestPlanReference>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
@@ -121,6 +131,17 @@
                BlueprintIdentifier = "BCA727B5296B3F5600BD5C56"
                BuildableName = "GamerankUITests.xctest"
                BlueprintName = "GamerankUITests"
+               ReferencedContainer = "container:Gamerank.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BCA727FD296B60CD00BD5C56"
+               BuildableName = "GamerankTestsNew.xctest"
+               BlueprintName = "GamerankTestsNew"
                ReferencedContainer = "container:Gamerank.xcodeproj">
             </BuildableReference>
          </TestableReference>
