@@ -1,0 +1,32 @@
+{
+  "pins" : [
+    {
+      "identity" : "gamerank-coremodule",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/fadhilikhsann/Gamerank-CoreModule.git",
+      "state" : {
+        "revision" : "d4164dbf5b560b4919d5b9275a400f90af0064fa",
+        "version" : "1.0.0"
+      }
+    },
+    {
+      "identity" : "rxswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ReactiveX/RxSwift",
+      "state" : {
+        "revision" : "b4307ba0b6425c0ba4178e138799946c3da594f8",
+        "version" : "6.5.0"
+      }
+    },
+    {
+      "identity" : "swinject",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Swinject/Swinject.git",
+      "state" : {
+        "revision" : "8bc503e60965298984fb58cf47b71c541449fe2a",
+        "version" : "2.8.3"
+      }
+    }
+  ],
+  "version" : 2
+}
